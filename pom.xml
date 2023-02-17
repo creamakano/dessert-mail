@@ -13,8 +13,9 @@
     <modules>
 <!--        <module>mail-common</module>-->
 <!--        <module>mail-user</module>-->
-<!--        <module>mail-product</module>-->
-<!--        <module>mail-order</module>-->
+        <module>mail-product</module>
+        <module>mail-common</module>
+        <!--        <module>mail-order</module>-->
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
