@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: mail-product
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dessert_pms?serverTimezone=UTC
+    username: root
+    password: 123
+  redis:
+    host: localhost
+    port: 6379
+    #    password: 479368      # Redis 服务器密码，默认为空。生产中，一定要设置 Redis 密码！
+    database: 0           # Redis 数据库号，默认为 0
+    timeout: 15000        # Redis 连接超时时间，单位：毫秒。
+    # 对应 RedisProperties.Jedis 内部类
+    jedis:
+      pool:
+        max-active: 8     # 连接池最大连接数，默认为 8 。使用负数表示没有限制    同一时间最大只能执行8条sql语句，每执行一条语句就会和数据库建立一个连接
+        max-idle: 8       # 默认连接数最大空闲的连接数，默认为 8 。使用负数表示没有限制。
+        min-idle: 0       # 默认连接池最小空闲的连接数，默认为 0 。允许设置 0 和 正数。
+        max-wait: -1      # 连接池最大阻塞等待时间，单位：毫秒。默认为 -1 ，表示不限制。    执行语句到数据库响应数据的时间
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      #配置主键自增规则
+      id-type: auto
+
+server:
+  port: 7000
+  servlet:
+    context-path: /product
+
+
+
+
+## 应用名称
+#spring.application.name=mail-user
+## 应用服务 WEB 访问端口
+#server.port=8080
+## Nacos帮助文档: https://nacos.io/zh-cn/docs/concepts.html
+## Nacos认证信息
+#spring.cloud.nacos.discovery.username=nacos
+#spring.cloud.nacos.discovery.password=nacos
+## Nacos 服务发现与注册配置，其中子属性 server-addr 指定 Nacos 服务器主机和端口
+#spring.cloud.nacos.discovery.server-addr=mse-6d50f4f0-p.nacos-ans.mse.aliyuncs.com:8848
+## 注册到 nacos 的指定 namespace，默认为 public
+#spring.cloud.nacos.discovery.namespace=public
+
+
