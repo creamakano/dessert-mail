@@ -3,7 +3,7 @@ spring:
     name: mail-product
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/dessert_pms?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/dessertmail_pms?serverTimezone=UTC
     username: root
     password: 123
   redis:
@@ -24,7 +24,9 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:com/dessert/product/mapper/*.xml
   global-config:
     db-config:
       #配置主键自增规则

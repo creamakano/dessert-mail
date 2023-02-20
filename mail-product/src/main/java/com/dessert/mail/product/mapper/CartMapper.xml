@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dessert.mail.product.mapper.CartMapper">
+    <select id="getList" resultType="com.dessert.common.entity.pms.CartVo">
+        select a.* , b.name as productName , b.price , b.discount
+        from pms_cart a
+        join pms_product b on a.product_id = b.id
+        <where>
+            and a.is_deleted = 0
+            and a.user_id = #{userId}
+        </where>
+    </select>
+</mapper>
