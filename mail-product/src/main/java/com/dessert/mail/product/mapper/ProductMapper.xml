@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dessert.mail.product.mapper.ProductMapper">
+    <select id="getPage" resultType="com.dessert.common.entity.pms.Product">
+        select *
+        from pms_product a
+        left join ums.ums_collection b on a.id = b.good_id and b.id = #{vo.userId}
+        <where>
+            <if test="vo.name!=null and vo.name!=''">
+                and a.name = #{vo.name}
+            </if>
+            <if test="vo.typeId!=null and vo.typeId!=''">
+                and a.type_id = #{vo.typeId}
+            </if>
+            <if test="vo.name!=null and vo.name!=''">
+                and a.name = #{vo.name}
+            </if>
+        </where>
+    </select>
+</mapper>
