@@ -1,9 +1,6 @@
 package com.dessert.common.entity.pms;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -61,4 +58,9 @@ public class Product {
     private String updateUser;
     @TableLogic(value = "0",delval = "1")
     private Integer isDeleted;
+
+    @TableField(exist = false)
+    private Integer isCollection;
+    @TableField(exist = false)
+    private String type;
 }

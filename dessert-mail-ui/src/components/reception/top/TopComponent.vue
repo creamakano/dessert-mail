@@ -8,7 +8,7 @@
     <div class="flex-grow"></div>
     <el-menu-item index="/home/userInfo">个人信息</el-menu-item>
     <el-menu-item index="/home/cart">购物车</el-menu-item>
-    <el-menu-item index="/home/">我的收藏</el-menu-item>
+    <el-menu-item index="/home/collection">我的收藏</el-menu-item>
     <el-menu-item index="/home/order">我的订单</el-menu-item>
     <el-menu-item index="/home">联系我们</el-menu-item>
 

@@ -21,6 +21,13 @@
     </properties>
 
     <dependencies>
+        <!--        alipay-->
+        <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-sdk-java -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>3.1.0</version>
+        </dependency>
         <dependency>
             <groupId>com.dessert.mail</groupId>
             <artifactId>mail-common</artifactId>

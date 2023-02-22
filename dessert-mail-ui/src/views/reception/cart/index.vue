@@ -1,8 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { get, put, del } from '../../../tool/http.js'
+import { get, put, del, post } from '../../../tool/http.js'
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router';
+const route = useRouter()
 const store = useStore()
 //购物车数据
 const cartList = ref([])
@@ -36,12 +38,26 @@ function deleteOneCart (id) {
     loadCartList()
   })
 }
+
+//结算
+function settlement () {
+  var cartIds = cartList.value.map(item => item.id);
+  post('/order/pay/settlement', {
+    cartIds: cartIds
+  }).then(res => {
+    if (res.code == 200) {
+      route.push({
+        path: '/home/settlement',
+        query: res.data
+      })
+    }
+  })
+}
 </script>
 
 <template>
   <div style="text-align: center;">
-    <h1 style="color:rgb(221, 126, 107);  padding-top: 60px;padding-bottom: 20px;
-         ">我的购物车</h1>
+    <h1 style="color:rgb(221, 126, 107);  padding-top: 60px;padding-bottom: 20px;">我的购物车</h1>
   </div>
   <div class="cart-c">
 
@@ -75,7 +91,7 @@ function deleteOneCart (id) {
         </el-table-column>
       </el-table>
       <div class="total">购物金额总计：￥{{ total }}</div>
-      <div class="total">去结算</div>
+      <div class="total"><el-button type="primary" @click="settlement()">去结算</el-button></div>
     </div>
   </div>
 </template>
@@ -93,5 +109,4 @@ function deleteOneCart (id) {
   line-height: 49px;
   border-bottom: 1px solid rgb(182, 181, 181);
 }
-
 </style>

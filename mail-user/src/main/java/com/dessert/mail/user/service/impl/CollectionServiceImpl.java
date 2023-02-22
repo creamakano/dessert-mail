@@ -6,29 +6,44 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dessert.common.entity.common.Result;
-import com.dessert.common.entity.ums.AddressInfo;
-import com.dessert.common.entity.ums.AddressInfoVo;
+import com.dessert.common.entity.pms.Product;
+import com.dessert.common.entity.ums.*;
 import com.dessert.mail.user.mapper.AddressMapper;
+import com.dessert.mail.user.mapper.CollectionMapper;
+import com.dessert.mail.user.mapper.UserMapper;
 import com.dessert.mail.user.service.AddressService;
+import com.dessert.mail.user.service.CollectionService;
+import com.dessert.mail.user.service.UserService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.WeakHashMap;
+
 @Service
-public class CollectionServiceImpl extends ServiceImpl<AddressMapper, AddressInfo> implements AddressService {
+public class CollectionServiceImpl extends ServiceImpl<CollectionMapper, Collection> implements CollectionService {
 
     @Override
-    public Result getPage(AddressInfoVo vo) {
-        if(ObjectUtils.isNull(vo.getUserId())){
-            return Result.parameterError();
-        }
-        LambdaQueryWrapper<AddressInfo> wrapper = new LambdaQueryWrapper<>();
-        buildCondition(vo, wrapper);
-        IPage<AddressInfo> page = this.page(new Page<>(vo.getPageNo(), vo.getPageSize()), wrapper);
-        return Result.success(page);
+    public Result insert(Collection collection) {
+        collection.setCollectionTime(new Date());
+        this.save(collection);
+        return Result.success();
     }
 
-    private void buildCondition(AddressInfoVo vo, LambdaQueryWrapper<AddressInfo> wrapper) {
-        if(ObjectUtils.isNotNull(vo.getUserId())){
-            wrapper.eq( AddressInfo::getUserId, vo.getUserId());
-        }
+    @Override
+    public Result deleteByProductId(Long productId, Long loginUserId) {
+        LambdaQueryWrapper<Collection> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Collection::getProductId,productId)
+                .eq(Collection::getUserId,loginUserId);
+        this.remove(wrapper);
+        return Result.success();
+    }
+
+    @Override
+    public Result getPage(CollectionVo vo) {
+        Page<Product> page = new Page<>(vo.getPageNo(), vo.getPageSize());
+        IPage<Product> iPage = baseMapper.getPage(page,vo);
+        return Result.success(iPage);
     }
 }

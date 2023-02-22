@@ -4,18 +4,17 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.dessert.common.entity.common.BaseVo;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
-@TableName("ums_collection")
-public class Collection implements Serializable {
+public class CollectionVo extends BaseVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(type = IdType.AUTO)
     /**
      * id
      */
@@ -43,5 +42,5 @@ public class Collection implements Serializable {
     @TableLogic(value = "0",delval = "1")
     private int isDeleted;
 
-    public Collection() {}
+    public CollectionVo() {}
 }

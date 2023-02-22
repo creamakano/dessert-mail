@@ -30,29 +30,97 @@ const orderList = ref([
     receiptInfo: 'xx 123333 广州',
     isComment: 0,
   },
+  {
+    id: 1,
+    code: '20222222',
+    price: 222.15,
+    status: 0,
+    date: '2023-02-08 13:55',
+    receiptInfo: 'xx 123333 广州',
+    isComment: 0,
+  },
+  {
+    id: 1,
+    code: '20222222',
+    price: 222.15,
+    status: 0,
+    date: '2023-02-08 13:55',
+    receiptInfo: 'xx 123333 广州',
+    isComment: 0,
+  },
+  {
+    id: 1,
+    code: '20222222',
+    price: 222.15,
+    status: 0,
+    date: '2023-02-08 13:55',
+    receiptInfo: 'xx 123333 广州',
+    isComment: 0,
+  },
+  {
+    id: 1,
+    code: '20222222',
+    price: 222.15,
+    status: 0,
+    date: '2023-02-08 13:55',
+    receiptInfo: 'xx 123333 广州',
+    isComment: 0,
+  },
+  {
+    id: 1,
+    code: '20222222',
+    price: 222.15,
+    status: 0,
+    date: '2023-02-08 13:55',
+    receiptInfo: 'xx 123333 广州',
+    isComment: 0,
+  },
+  {
+    id: 1,
+    code: '20222222',
+    price: 222.15,
+    status: 0,
+    date: '2023-02-08 13:55',
+    receiptInfo: 'xx 123333 广州',
+    isComment: 0,
+  },
+  {
+    id: 1,
+    code: '20222222',
+    price: 222.15,
+    status: 0,
+    date: '2023-02-08 13:55',
+    receiptInfo: 'xx 123333 广州',
+    isComment: 0,
+  }
 ])
 //获取页面数据
 const queryForm = reactive({
-  currentPage:0,
-  pageSize:10,
-  total:0
+  pageNo: 0,
+  pageSize: 10,
+  total: 0
 
 })
 function getPage () {
-  // get('/order/order/',)
+  get('/order/order', queryForm).then(res => {
+    if (res.code == 200) {
+      var data = res.data
+      orderList.value = data.records
+      queryForm.total = data.total
+    }
+  })
 }
 </script>
 
 <template>
   <div class="main">
     <div style="text-align: center;">
-      <h1 style="color:rgb(221, 126, 107);  padding-top: 40px;padding-bottom: 20px;
-                   ">订单详情</h1>
+      <h1 style="color:rgb(221, 126, 107);  padding-top: 10px;padding-bottom: 0px; ">订单详情</h1>
     </div>
     <div class="content-c">
       <div class="content">
         <el-table :data="orderList" style="width: 100%" :cell-style="{ textAlign: 'center' }"
-          :header-cell-style="{ 'text-align': 'center' }" height="400">
+          :header-cell-style="{ 'text-align': 'center' }" height="530">
 
           <el-table-column type="index" />
           <el-table-column prop="code" label="订单编号" width="180" />
@@ -80,10 +148,11 @@ function getPage () {
           </el-table-column>
 
         </el-table>
-        <div>
-        <el-pagination :current-page="queryForm.currentPage" :page-size="queryForm.pageSize" :page-sizes="[10, 20, 50]" :small="small"
-          :disabled="disabled" :background="true" layout="total, sizes, prev, pager, next, jumper" :total="queryForm.total"
-          @size-change="handleSizeChange" @current-change="handleCurrentChange" class="bottom"></el-pagination>
+        <div class="bottom-c">
+          <el-pagination :current-page="queryForm.pageNo" :page-size="queryForm.pageSize" :page-sizes="[10, 20, 50]"
+            :small="small" :disabled="disabled" :background="true" layout="total, sizes, prev, pager, next, jumper"
+            :total="queryForm.total" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            class="bottom"></el-pagination>
         </div>
       </div>
     </div>
@@ -111,5 +180,14 @@ function getPage () {
   padding: 10px;
   box-sizing: border-box;
   height: 550px;
+}
+
+.bottom-c {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  padding-right: 60px;
+  padding-top: 10px;
+  box-sizing: border-box;
 }
 </style>

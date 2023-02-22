@@ -31,8 +31,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if(ObjectUtils.isNotNull(vo.getId())){
             wrapper.eq(Order::getId, vo.getId());
         }
-        if(ObjectUtils.isNotNull(vo.getCode())){
-            wrapper.like(Order::getCode, vo.getCode());
+        if(ObjectUtils.isNotNull(vo.getOrderNum())){
+            wrapper.like(Order::getOrderNum, vo.getOrderNum());
         }
         if(ObjectUtils.isNotNull(vo.getAddress())){
             wrapper.like(Order::getAddress, vo.getAddress());
@@ -43,5 +43,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if(vo.getStatus()!=null){
             wrapper.eq(Order::getStatus, vo.getStatus());
         }
+        wrapper.orderByDesc(Order::getDate);
     }
 }

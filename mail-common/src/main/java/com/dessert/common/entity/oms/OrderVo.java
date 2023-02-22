@@ -23,7 +23,12 @@ public class OrderVo extends BaseVo implements Serializable {
     /**
      * 编号
      */
-    private String code;
+    private String orderNum;
+
+    /**
+     * 商品描述
+     */
+    private String description;
 
     /**
      * user_id
@@ -63,7 +68,7 @@ public class OrderVo extends BaseVo implements Serializable {
     /**
      * 1 已评价 0 未评价 2 部分评价
      */
-    private String isComment;
+    private Integer isComment;
 
     /**
      * 创建人

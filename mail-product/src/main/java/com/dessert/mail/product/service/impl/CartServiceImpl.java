@@ -20,4 +20,10 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         List<CartVo> list = baseMapper.getList(userId);
         return Result.success(list);
     }
+
+    @Override
+    public Result<List<CartVo>> getListByIds(List<Long> ids) {
+        List<CartVo> list = baseMapper.getListByIds(ids);
+        return Result.success(list);
+    }
 }

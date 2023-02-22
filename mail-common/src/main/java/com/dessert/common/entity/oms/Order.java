@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @TableName("oms_order")
 @Data
@@ -23,7 +24,12 @@ public class Order implements Serializable {
     /**
      * 编号
      */
-    private String code;
+    private String orderNum;
+
+    /**
+     * 商品描述
+     */
+    private String description;
 
     /**
      * user_id
@@ -63,7 +69,7 @@ public class Order implements Serializable {
     /**
      * 1 已评价 0 未评价 2 部分评价
      */
-    private String isComment;
+    private Integer isComment;
 
     /**
      * 创建人
@@ -97,4 +103,6 @@ public class Order implements Serializable {
     @TableLogic(value = "0",delval = "1")
     private int isDeleted;
 
+    @TableField(exist = false)
+    private List<Long> cartIds;
 }

@@ -148,6 +148,15 @@ function updateAddress () {
     }
   })
 }
+//收货地址分页信息改变
+function handleSizeChange (val) {
+  page.pageSize = val
+  getReceipt()
+}
+function handleCurrentChange (val) {
+  page.pageNo = val
+  getReceipt()
+}
 </script>
 
 
@@ -244,13 +253,13 @@ function updateAddress () {
       </template>
     </el-dialog>
   </div>
-  <div v-if="showInfo == 'receipt'" style="width: 860px;margin: 0 auto;">
+  <div v-if="showInfo == 'receipt'" style="width: 890px;margin: 0 auto;">
     <div style="text-align: center;">
       <h1 style="color:rgb(221, 126, 107) ">收货地址</h1>
     </div>
-    <el-table :data="receipt" style="width: 860px" class="receipt-table" :header-cell-style="{ 'text-align': 'center' }"
-      :cell-style="{ 'text-align': 'center' }">
-      <el-table-column type="index" width="20" />
+    <el-table :data="receipt" style="width: 890px" class="receipt-table" :header-cell-style="{ 'text-align': 'center' }"
+      :cell-style="{ 'text-align': 'center' }" height="530">
+      <el-table-column type="index" width="50" />
       <el-table-column prop="name" label="收获人" width="180" />
       <el-table-column prop="phone" label="手机号码" width="180" />
       <el-table-column prop="address" label="详细地址" width="300" />
@@ -285,6 +294,12 @@ function updateAddress () {
 
 .user-info-item-label label {
   color: rgb(221, 126, 107);
+}
+
+.bottom {
+  display: flex;
+  justify-content: end;
+  padding-top: 20px;
 }
 
 .popclass .el-popper {

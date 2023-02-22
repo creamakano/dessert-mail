@@ -2,10 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.dessert.mail.product.mapper.ProductMapper">
     <select id="getPage" resultType="com.dessert.common.entity.pms.Product">
-        select *
-        from pms_product a
-        left join ums.ums_collection b on a.id = b.good_id and b.id = #{vo.userId}
+        SELECT
+        a.*,
+        CASE
+            WHEN b.product_id IS NOT NULL THEN
+            1 ELSE 0
+            END AS is_collection
+        FROM
+        pms_product a
+        LEFT JOIN dessertmail_ums.ums_collection b ON a.id = b.product_id
+        AND b.user_id = #{vo.userId}
+        AND b.is_deleted = 0
         <where>
+            and a.is_deleted = 0
             <if test="vo.name!=null and vo.name!=''">
                 and a.name = #{vo.name}
             </if>

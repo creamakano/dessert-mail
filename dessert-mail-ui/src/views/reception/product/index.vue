@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { get, post } from '../../../tool/http.js'
+import { get, post, del } from '../../../tool/http.js'
 import { ElMessage } from 'element-plus'
 import { Star, StarFilled } from '@element-plus/icons-vue'
 //商品分类
@@ -57,11 +57,27 @@ function handleSizeChange (val) {
 }
 
 //收藏
-function starCancel (id) {
-  console.log(id + "  cancel");
+function starCancel (id, val) {
+  del(`/user/collection/deleteByProductId/${id}`).then(res => {
+    if (res.code == 200) {
+      ElMessage.success("取消收藏成功");
+      val.isCollection = 0
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
 }
-function star (id) {
-  console.log(id + "  star");
+function star (id, val) {
+  post('/user/collection/insert', {
+    productId: id
+  }).then(res => {
+    if (res.code == 200) {
+      ElMessage.success("收藏成功");
+      val.isCollection = 1
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
 }
 
 //跳转到详情
@@ -111,10 +127,10 @@ function addToCart (id) {
             <span v-if="val.discount != 1" class="deleteLine">￥{{ val.price }}</span>
             <span v-if="val.discount != 1" class="discountPrice">&nbsp; ￥{{ val.price * val.discount }}</span>
           </div>
-          <el-icon v-if="val.id % 2 == 1" class="star" size="25px" @click="star(val.id)" color="white">
+          <el-icon v-if="val.isCollection == 0" class="star" size="25px" @click="star(val.id, val)" color="white">
             <Star />
           </el-icon>
-          <el-icon v-else class="star" size="28px" @click="starCancel(val.id)" color="red">
+          <el-icon v-else class="star" size="28px" @click="starCancel(val.id, val)" color="red">
             <StarFilled />
           </el-icon>
           <el-button type="primary" @click="addToCart(val.id)">加入购物车</el-button>

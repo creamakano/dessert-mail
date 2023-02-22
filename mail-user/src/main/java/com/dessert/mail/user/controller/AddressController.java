@@ -1,5 +1,6 @@
 package com.dessert.mail.user.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.dessert.common.entity.common.Result;
 import com.dessert.common.entity.pms.ProductVo;
 import com.dessert.common.entity.ums.AddressInfo;
@@ -37,5 +38,13 @@ public class AddressController extends BaseController{
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable("id") Long id){
         return Result.success(addressService.removeById(id));
+    }
+
+    @GetMapping("/getDefault")
+    public Result getDefault(HttpSession session){
+        LambdaQueryWrapper<AddressInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(AddressInfo::getUserId,getLoginUserId(session));
+        wrapper.eq(AddressInfo::getIsDefault,1);
+        return Result.success(addressService.getOne(wrapper));
     }
 }

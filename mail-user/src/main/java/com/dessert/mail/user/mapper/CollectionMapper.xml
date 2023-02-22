@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dessert.mail.user.mapper.CollectionMapper">
+    <select id="getPage" resultType="com.dessert.common.entity.pms.Product">
+        SELECT b.*,c.name as type
+        FROM ums_collection a
+                 JOIN dessertmail_pms.pms_product b ON a.product_id = b.id
+                 JOIN dessertmail_pms.pms_type c ON b.type_id = c.id
+        WHERE a.user_id = #{vo.userId}
+        ORDER BY a.collection_time DESC
+    </select>
+</mapper>

@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface CartMapper extends BaseMapper<Cart> {
     List<CartVo> getList(@Param("userId") Long userId);
+
+    List<CartVo> getListByIds(List<Long> ids);
 }

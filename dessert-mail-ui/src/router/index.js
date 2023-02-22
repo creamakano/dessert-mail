@@ -27,7 +27,16 @@ const router = createRouter({
         {
           path: 'order',
           component: () => import('../views/reception/order/index.vue')
-        }
+        },
+        {
+          path: 'collection',
+          component: () => import('../views/reception/collection/index.vue')
+        },
+        {
+          path: 'settlement',
+          component: () => import('../views/reception/settlement/index.vue')
+        },
+      
       ]
     },
     {
