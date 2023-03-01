@@ -24,17 +24,16 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/**/*.xml
+  mapper-locations: classpath*:/mapper/**/*.xml #SQL映射文件位置
   global-config:
     db-config:
-      #配置主键自增规则
-      id-type: auto
+      id-type: auto #配置主键自增规则
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启日志打印
 server:
-  port: 10001
+  port: 10001 #服务器端口
   servlet:
-    context-path: /user
+    context-path: /user #上下文路径
 
 
 

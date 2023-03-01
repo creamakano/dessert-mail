@@ -28,9 +28,9 @@ public class ProductVo extends BaseVo {
 
     private Long storage;
 
-    private Integer isRecommend;
+    private Integer isOnSelf;
 
-    private Integer isAdvertisement;
+    private String description;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -59,4 +59,5 @@ public class ProductVo extends BaseVo {
     private Long userId;
 
     private Integer isCollection;
+    private String type;
 }

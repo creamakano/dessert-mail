@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/login/LoginView.vue'
 import TestView from '../views/reception/test/index.vue'
+import BackView from '../views/backstage/index.vue'
+import store from '../store'
+import { awaitGet } from '../tool/http.js'
+import { ElMessage } from 'element-plus'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -36,7 +40,19 @@ const router = createRouter({
           path: 'settlement',
           component: () => import('../views/reception/settlement/index.vue')
         },
-      
+        {
+          path: 'productDetail',
+          component: () => import('../views/reception/productDetail/index.vue')
+        },
+        {
+          path: 'orderDetail',
+          component: () => import('../views/reception/orderDetail/index.vue')
+        },
+        {
+          path: 'link',
+          component: () => import('../views/reception/link/index.vue')
+        },
+
       ]
     },
     {
@@ -47,6 +63,25 @@ const router = createRouter({
     {
       path: '/test',
       component: TestView
+    },
+    {
+      path: '/back',
+      name: 'back',
+      component: BackView,
+      children: [
+        {
+          path: '',
+          component: () => import('../views/backstage/type/index.vue')
+        },
+        {
+          path: 'type',
+          component: () => import('../views/backstage/type/index.vue')
+        },
+        {
+          path: 'product',
+          component: () => import('../views/backstage/product/index.vue')
+        },
+      ]
     }
   ]
 })
@@ -65,4 +100,38 @@ const router = createRouter({
 //       }
 //   }
 // });
+
+
+
+// router.beforeEach(async (to, from, next) => {
+//   if (to.path != '/') {
+//     if (store.state.userInfo.auth == '') {
+//       await awaitGet('/user/login/session').then(res => {
+//         if (res.code == 200) {
+//           store.commit("setUserInfo", res.data)
+//         } else {
+//           ElMessage.error(res.msg)
+//           router.push('/')
+//         }
+//       })
+//     }
+//     if (to.path == '/home/link' && store.state.userInfo.auth != null && store.state.userInfo.auth < 1) {
+//       ElMessage.error("权限不足")
+//       router.push('/home')
+//     }
+//   }
+
+//   next()//需要调用next()才能放行
+// })
+
+
+
+
+
+
+
+
+
+
+
 export default router

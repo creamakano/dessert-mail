@@ -22,7 +22,7 @@ function getPage () {
 }
 getPage()
 function deleteCollection (id) {
-  del(`/user/collection/${id}`).then(res => {
+  del(`/user/collection/delete/${id}`).then(res => {
     ElMessage.success('删除成功')
     getPage()
   })

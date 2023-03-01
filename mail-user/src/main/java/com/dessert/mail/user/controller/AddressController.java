@@ -30,14 +30,20 @@ public class AddressController extends BaseController{
         addressInfo.setUserId(this.getLoginUserId(session));
         return Result.success(addressService.updateById(addressInfo));
     }
+    @PutMapping("/setDefault")
+    public Result setDefault(@RequestBody AddressInfo addressInfo,HttpSession session){
+        addressInfo.setUserId(getLoginUserId(session));
+        return addressService.setDefault(addressInfo);
+    }
     @PostMapping("/insert")
     public Result insert(@RequestBody AddressInfo addressInfo,HttpSession session){
         addressInfo.setUserId(this.getLoginUserId(session));
-        return Result.success(addressService.save(addressInfo));
+        return addressService.insert(addressInfo);
     }
     @DeleteMapping("/delete/{id}")
-    public Result delete(@PathVariable("id") Long id){
-        return Result.success(addressService.removeById(id));
+    public Result delete(@PathVariable("id") Long id,HttpSession session){
+        Long userId = getLoginUserId(session);
+        return addressService.delete(id,userId);
     }
 
     @GetMapping("/getDefault")
@@ -47,4 +53,6 @@ public class AddressController extends BaseController{
         wrapper.eq(AddressInfo::getIsDefault,1);
         return Result.success(addressService.getOne(wrapper));
     }
+
+
 }

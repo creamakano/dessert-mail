@@ -1,99 +1,11 @@
 <script setup>
 import { reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { get } from '../../../tool/http';
-const orderList = ref([
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州xxxxxxxxxxxxxxxxxxxxxxxxsssssssssssssssssssssssssssssssssssssssssssssssss',
-    isComment: 1,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 1,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 2,
+const {query} = useRoute()
+const route = useRouter()
+const orderList = ref()
 
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  },
-  {
-    id: 1,
-    code: '20222222',
-    price: 222.15,
-    status: 0,
-    date: '2023-02-08 13:55',
-    receiptInfo: 'xx 123333 广州',
-    isComment: 0,
-  }
-])
 //获取页面数据
 const queryForm = reactive({
   pageNo: 0,
@@ -110,6 +22,31 @@ function getPage () {
     }
   })
 }
+getPage()
+
+//分页信息改变
+function handleSizeChange (val) {
+  queryForm.pageSize = val
+  getPage()
+}
+function handleCurrentChange (val) {
+  queryForm.pageNo = val
+  getPage()
+}
+
+//订单详情页
+function goToOrderDetail(id){
+  // get('/order/orderDetail/list',{
+  //   orderId:id
+  // }).then(res=>{
+    
+  // })
+
+  route.push({
+    path:'/home/orderDetail',
+    query:{orderId:id}
+  })
+}
 </script>
 
 <template>
@@ -123,8 +60,8 @@ function getPage () {
           :header-cell-style="{ 'text-align': 'center' }" height="530">
 
           <el-table-column type="index" />
-          <el-table-column prop="code" label="订单编号" width="180" />
-          <el-table-column prop="price" label="订单金额" width="180" />
+          <el-table-column prop="orderNum" label="订单编号" width="200" />
+          <el-table-column prop="total" label="订单金额" width="180" />
           <el-table-column label="下单时间" width="180">
             <template v-slot="scope">
               <template v-if="scope.row.status == 1">已支付</template>
@@ -132,7 +69,12 @@ function getPage () {
             </template>
           </el-table-column>
           <el-table-column prop="date" label="下单时间" width="180" />
-          <el-table-column prop="receiptInfo" label="收货信息" width="180" show-overflow-tooltip />
+          <el-table-column label="收货信息" width="360" show-overflow-tooltip>
+            <template v-slot="scope">
+              {{ scope.row.name }}&nbsp; , &nbsp; {{ scope.row.phone }} &nbsp; , &nbsp; {{ scope.row.address }}
+
+            </template>
+          </el-table-column>
           <el-table-column label="查看详情" width="180">
             <template v-slot="scope">
               <el-button @click="goToOrderDetail(scope.row.id)">查看详情</el-button>
@@ -140,7 +82,8 @@ function getPage () {
           </el-table-column>
           <el-table-column label="评价" width="180">
             <template v-slot="scope">
-              <template v-if="scope.row.isComment == 1">查看评价</template>
+              <template v-if="scope.row.status == 0">去支付</template>
+              <template v-else-if="scope.row.isComment == 1">查看评价</template>
               <template v-else>
                 <el-button @click="goToComment(scope.row.id)">去评价</el-button>
               </template>
@@ -161,7 +104,7 @@ function getPage () {
 
 <style scoped>
 .main {
-  width: 70%;
+  width: 80%;
   height: 600px;
   margin: 0 auto;
   margin-top: 30px;

@@ -4,13 +4,15 @@
     <el-menu-item index="/home">&nbsp; 欢迎光临 老友记甜品屋🏠</el-menu-item>
     <el-menu-item v-if="$store.state.userInfo.name"> 欢迎 {{ $store.state.userInfo.name }}</el-menu-item>
     <el-menu-item v-else index="/"> 登录</el-menu-item>
+    <!-- <el-menu-item v-if="$store.state.userInfo.auth > 0"> <a @click="goback">后台</a> </el-menu-item> -->
+    <el-menu-item v-if="$store.state.userInfo.auth>0" index="/back"> 后台 </el-menu-item>
 
     <div class="flex-grow"></div>
     <el-menu-item index="/home/userInfo">个人信息</el-menu-item>
     <el-menu-item index="/home/cart">购物车</el-menu-item>
     <el-menu-item index="/home/collection">我的收藏</el-menu-item>
     <el-menu-item index="/home/order">我的订单</el-menu-item>
-    <el-menu-item index="/home">联系我们</el-menu-item>
+    <el-menu-item index="/back">联系我们</el-menu-item>
 
   </el-menu>
 </template>
@@ -26,6 +28,10 @@ const activeIndex = ref('/home')
 const handleSelect = (key, keyPath) => {
   console.log(key, keyPath)
 }
+
+// function goback () {
+//   window.location.href = 'http://localhost:8082/back/login?userName=admin&password=123'
+// }
 </script>
 
 <style>

@@ -28,7 +28,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         loginUser.setMail(checkUser.getMail());
         loginUser.setName(checkUser.getName());
         loginUser.setPhone(checkUser.getPhone());
-
+        loginUser.setAuth(checkUser.getAuth());
         session.setAttribute("LoginUser",loginUser);
         return Result.success(loginUser);
     }

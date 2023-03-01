@@ -8,7 +8,9 @@ const store = createStore({
     userInfo: {
       id: "",
       name: "",
-      creationTime: "",
+      mail: "",
+      phone:"",
+      auth:""
     }
   },
   mutations: {
@@ -21,5 +23,9 @@ const store = createStore({
 
   }
 })
+
+
+
+
 
 export default store

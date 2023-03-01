@@ -26,6 +26,21 @@ async function get (url, data) {
   })
 }
 
+async function awaitGet (url, data) {
+  return new Promise(async (resolve, reject) => {
+    await axios({
+      method: 'get',
+      url: url,
+      params: data,
+      dataType: 'json'
+    }).then(res => {
+      resolve(res.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
 async function post (url, data) {
   return new Promise((resolve, reject) => {
     axios({
@@ -72,5 +87,5 @@ async function del (url, param, data) {
 
 
 
-export { axios, get, post, put, del }
+export { axios, get, post, put, del ,awaitGet}
 

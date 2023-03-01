@@ -11,7 +11,7 @@
         </where>
     </select>
     <select id="getListByIds" resultType="com.dessert.common.entity.pms.CartVo">
-        select a.* , b.name as productName , b.price , b.discount
+        select a.* , b.name as productName , b.price , b.discount ,b.picture
         from pms_cart a
         join pms_product b on a.product_id = b.id
         <where>

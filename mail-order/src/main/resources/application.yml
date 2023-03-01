@@ -3,7 +3,7 @@ spring:
     name: mail-order
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/dessertmail_oms?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/dessertmail_oms?serverTimezone=UTC&serverTimezone=Asia/Shanghai
     username: root
     password: 123
   redis:
@@ -23,6 +23,10 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+  jackson:
+    locale: zh
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

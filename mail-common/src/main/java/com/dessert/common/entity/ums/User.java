@@ -26,6 +26,9 @@ public class User implements Serializable {
     private String phone;
 
     private String password;
+
+    private Integer auth;
+
     @TableLogic(value = "0",delval = "1")
     private Integer isDeleted;
 

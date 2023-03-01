@@ -4,20 +4,24 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dessert.common.entity.common.Result;
 import com.dessert.common.entity.oms.Order;
+import com.dessert.common.entity.oms.OrderDetail;
 import com.dessert.common.entity.pms.CartVo;
 import com.dessert.mail.order.config.AlipayConfig;
 import com.dessert.mail.order.feign.ProductFeignClient;
 import com.dessert.mail.order.mapper.OrderMapper;
+import com.dessert.mail.order.service.OrderDetailService;
 import com.dessert.mail.order.service.OrderService;
 import com.dessert.mail.order.service.PayService;
 import com.dessert.mail.order.utils.OrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +33,8 @@ public class PayServiceImpl extends ServiceImpl<OrderMapper, Order> implements P
     private ProductFeignClient productFeignClient;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private OrderDetailService detailService;
 
     @Override
     public Result settlement(Order order, Long loginUserId) {
@@ -42,23 +48,33 @@ public class PayServiceImpl extends ServiceImpl<OrderMapper, Order> implements P
         order.setDescription(description);
         order.setTotal(total);
         // order.setUserId(loginUserId);
-        // order.setDate(new Date());
-        // order.setIsComment(0);
-        // order.setStatus(0);
+
         return Result.success(order);
     }
 
     @Override
     public Result toAlipay(Order order) {
-        //保存订单
         if(ObjectUtils.isNull(order.getOrderNum(),order.getDescription(),order.getTotal())){
             return Result.parameterError();
         }
+        List<CartVo> cartList = productFeignClient.getListByIds(order.getCartIds()).getData();
         order.setDate(new Date());
         order.setIsComment(0);
         order.setStatus(0);
         orderService.save(order);
-
+        List<OrderDetail> detailList = new ArrayList<>();
+        //保存订单详情
+        for (CartVo cart : cartList) {
+            OrderDetail detail = new OrderDetail();
+            detail.setNum(cart.getNum());
+            detail.setOrderId(order.getId());
+            detail.setProductId(cart.getProductId());
+            detail.setProductName(cart.getProductName());
+            detail.setProductPrice(cart.getPrice()*cart.getDiscount());
+            detail.setProductPicture(cart.getPicture());
+            detailList.add(detail);
+        }
+        detailService.saveBatch(detailList);
         AlipayClient alipayClient = new DefaultAlipayClient(
                 AlipayConfig.gatewayUrl,
                 AlipayConfig.app_id,
@@ -87,6 +103,14 @@ public class PayServiceImpl extends ServiceImpl<OrderMapper, Order> implements P
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+        paySuccess(order);
         return Result.success(form);
+    }
+
+    private void paySuccess(Order order) {
+        Order updateOrder = new Order();
+        updateOrder.setId(order.getId());
+        updateOrder.setStatus(1);
+        this.updateById(updateOrder);
     }
 }

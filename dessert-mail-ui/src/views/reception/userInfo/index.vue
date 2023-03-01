@@ -1,7 +1,7 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex';
-import { get, put, post } from '../../../tool/http.js';
+import { get, put, post, del } from '../../../tool/http.js';
 import { ElMessage } from 'element-plus'
 
 import {
@@ -32,17 +32,22 @@ function showUserInfoForm () {
 //维护用户信息
 // const useInfoForm = store.state.useInfo
 const userInfoForm = store.state.userInfo
-function submitUserInfoForm () {
-  put("/user/user/update", userInfoForm).then(res => {
-    if (res.code == 200) {
-      ElMessage.success(res.msg)
-    } else {
-      ElMessage.error(res.msg)
-    }
-  })
+onMounted(() => {
+  if (JSON.stringify(userInfoForm)) {
+    userInfoForm.name = store.state.userInfo.name
+  }
+}),
+  function submitUserInfoForm () {
+    put("/user/user/update", userInfoForm).then(res => {
+      if (res.code == 200) {
+        ElMessage.success(res.msg)
+      } else {
+        ElMessage.error(res.msg)
+      }
+    })
 
-  console.log(userInfoForm);
-}
+    console.log(userInfoForm);
+  }
 
 //维护密码
 const passwordForm = reactive({
@@ -157,6 +162,24 @@ function handleCurrentChange (val) {
   page.pageNo = val
   getReceipt()
 }
+
+//设置默认地址
+function setDefault (id) {
+  put('/user/address/setDefault', {
+    id: id
+  }).then(res => {
+    ElMessage.success('设置成功')
+    getReceipt()
+
+  })
+}
+function deleteAddress (id) {
+  del(`/user/address/delete/${id}`).then(res => {
+    ElMessage.success('删除成功')
+    getReceipt()
+
+  })
+}
 </script>
 
 
@@ -262,13 +285,15 @@ function handleCurrentChange (val) {
       <el-table-column type="index" width="50" />
       <el-table-column prop="name" label="收获人" width="180" />
       <el-table-column prop="phone" label="手机号码" width="180" />
-      <el-table-column prop="address" label="详细地址" width="300" />
+      <el-table-column prop="address" label="详细地址" width="300" show-overflow-tooltip />
 
       <el-table-column label="操作" width="180">
         <template v-slot="scope">
           <el-button type="primary" :icon="Edit" circle plain title="编辑" @click="openUpdateAddressDialog(scope.row)" />
-          <el-button type="warning" :icon="Star" circle plain title="设为默认" />
-          <el-button type="danger" :icon="Delete" circle plain title="删除" />
+          <el-button v-if="scope.row.isDefault == 0" type="warning" :icon="Star" circle plain title="设为默认"
+            @click="setDefault(scope.row.id)" />
+          <el-button v-else type="warning" :icon="Star" circle />
+          <el-button type="danger" :icon="Delete" circle plain title="删除" @click="deleteAddress(scope.row.id)" />
         </template>
       </el-table-column>
     </el-table>

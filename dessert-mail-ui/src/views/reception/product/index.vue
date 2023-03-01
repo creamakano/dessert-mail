@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import { get, post, del } from '../../../tool/http.js'
 import { ElMessage } from 'element-plus'
 import { Star, StarFilled } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+const route = useRouter()
 //商品分类
 const productType = ref([])
 get('/product/type/list').then((res) => {
@@ -80,11 +82,6 @@ function star (id, val) {
   })
 }
 
-//跳转到详情
-function goToProductDetail (id) {
-  console.log(id + "  goToProductDetail");
-}
-
 
 //添加到购物车
 function addToCart (id) {
@@ -98,9 +95,14 @@ function addToCart (id) {
       ElMessage.error(res.msg)
     }
   })
+}
 
-  // console.log("sessipn" + window.localStorage.getItem('LoginUser'));
-
+//跳转到商品详情页
+function goToProductDetail (id) {
+  route.push({
+    path: '/home/productDetail',
+    query: {id:id}
+  })
 }
 </script>
 
@@ -119,7 +121,7 @@ function addToCart (id) {
         <!-- <el-empty v-if="productList.values.size == 0" description="description" /> -->
 
         <div class="product-c" v-for="(val) in productList" :key="val.id">
-          <el-image style="width: 160px; height: 160px" :src="`/src/assets/images/${val.name}.jpg`" :fit="fit"
+          <el-image style="width: 160px; height: 160px" :src="`/src/assets/images/${val.picture}`" :fit="fit"
             @click="goToProductDetail(val.id)" />
           <div>{{ val.name }}</div>
           <div class="price-c">

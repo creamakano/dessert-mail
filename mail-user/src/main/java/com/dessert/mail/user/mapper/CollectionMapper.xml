@@ -6,7 +6,7 @@
         FROM ums_collection a
                  JOIN dessertmail_pms.pms_product b ON a.product_id = b.id
                  JOIN dessertmail_pms.pms_type c ON b.type_id = c.id
-        WHERE a.user_id = #{vo.userId}
+        WHERE a.user_id = #{vo.userId} and a.is_deleted = 0
         ORDER BY a.collection_time DESC
     </select>
 </mapper>

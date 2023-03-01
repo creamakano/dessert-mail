@@ -8,4 +8,10 @@ import com.dessert.common.entity.ums.User;
 
 public interface AddressService extends IService<AddressInfo> {
     Result getPage(AddressInfoVo vo);
+
+    Result setDefault(AddressInfo addressInfo);
+
+    Result delete(Long id, Long userId);
+
+    Result insert(AddressInfo addressInfo);
 }

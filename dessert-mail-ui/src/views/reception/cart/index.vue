@@ -15,14 +15,6 @@ function loadCartList () {
 }
 loadCartList()
 
-//总数
-const total = computed(() => {
-  let count = 0
-  for (let i = 0; i < cartList.value.length; i++) {
-    count = count + cartList.value[i].price * cartList.value[i].discount * cartList.value[i].num
-  }
-  return count;
-})
 
 //购物车商品数量改变
 function handleChange (id, num) {
@@ -39,9 +31,18 @@ function deleteOneCart (id) {
   })
 }
 
+const selectionList = ref([])
+function selectionChange (v) {
+  selectionList.value = v
+}
+
 //结算
 function settlement () {
-  var cartIds = cartList.value.map(item => item.id);
+  if(selectionList.value.length==0){
+    ElMessage.error("请选择要结算的商品")
+    return;
+  }
+  var cartIds = selectionList.value.map(item => item.id);
   post('/order/pay/settlement', {
     cartIds: cartIds
   }).then(res => {
@@ -53,6 +54,19 @@ function settlement () {
     }
   })
 }
+
+//总数
+const total = computed(() => {
+  let count = 0
+  if(selectionList.value.length != 0){
+    for (let i = 0; i < selectionList.value.length; i++) {
+    count = count + selectionList.value[i].price * selectionList.value[i].discount * selectionList.value[i].num
+  }
+  }
+  
+  return count;
+})
+
 </script>
 
 <template>
@@ -63,8 +77,8 @@ function settlement () {
 
     <div class="cart">
       <el-table :data="cartList" style="width: 100%" :cell-style="{ textAlign: 'center' }"
-        :header-cell-style="{ 'text-align': 'center' }">
-        <el-table-column type="index" />
+        :header-cell-style="{ 'text-align': 'center' }" @selection-change="selectionChange">
+        <el-table-column type="selection" width="55" />
         <el-table-column prop="productName" label="商品名称" width="180" />
         <el-table-column prop="price" label="商品价格" width="180" />
         <el-table-column label="优惠" width="180">

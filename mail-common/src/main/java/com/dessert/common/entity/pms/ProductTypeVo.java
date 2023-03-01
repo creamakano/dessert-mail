@@ -1,5 +1,7 @@
 package com.dessert.common.entity.pms;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.dessert.common.entity.common.BaseVo;
@@ -13,19 +15,10 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Accessors(chain = true)
-@TableName("pms_cart")
-public class CartVo extends BaseVo {
-
+public class ProductTypeVo extends BaseVo {
     private Long id;
 
-    private Long userId;
-
-    private Long productId;
-
-    private Integer num;
+    private String name;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -50,13 +43,5 @@ public class CartVo extends BaseVo {
     private String updateUser;
     @TableLogic(value = "0",delval = "1")
     private Integer isDeleted;
-
-    private String productName;
-
-    private Double price;
-
-    private Double discount;
-    private String picture;
-
 
 }

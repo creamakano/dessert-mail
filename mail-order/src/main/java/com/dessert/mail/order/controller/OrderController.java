@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import javax.xml.crypto.Data;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @RestController
 @RequestMapping("order")
@@ -22,6 +25,10 @@ public class OrderController extends BaseController{
     private Result page(OrderVo vo, HttpSession session){
         Long userId = getLoginUserId(session);
         vo.setUserId(userId);
+        return orderService.getPage(vo);
+    }
+    @GetMapping("/allPage")
+    private Result allPage(OrderVo vo){
         return orderService.getPage(vo);
     }
 }

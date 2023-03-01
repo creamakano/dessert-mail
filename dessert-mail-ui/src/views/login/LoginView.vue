@@ -4,6 +4,7 @@ import { get, post } from '../../tool/http.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
+import linkView from '../reception/link/index.vue'
 const store = useStore()
 const loginForm = reactive({
   mail: '',
@@ -61,8 +62,8 @@ function login () {
 
         </el-form-item>
         <!-- <el-form-item label="验证码" class="login-item code">
-            <el-input v-model="loginForm.code" type="text" placeholder="请输入验证码" />
-          </el-form-item> -->
+              <el-input v-model="loginForm.code" type="text" placeholder="请输入验证码" />
+            </el-form-item> -->
 
       </el-form>
 

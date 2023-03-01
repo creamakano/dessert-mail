@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class LoginUser implements Serializable {
+    private static final long serialVersionUID = -1;
     private Long id;
 
     private String name;
@@ -13,5 +14,7 @@ public class LoginUser implements Serializable {
     private String mail;
 
     private String phone;
+
+    private Integer auth;
 
 }

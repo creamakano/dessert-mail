@@ -1,5 +1,7 @@
 package com.dessert.mail.product.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.dessert.common.entity.common.Result;
 import com.dessert.common.entity.pms.Cart;
 import com.dessert.common.entity.pms.CartVo;
@@ -39,6 +41,19 @@ public class CartController extends BaseController{
     public Result insert(@RequestBody Cart cart, HttpSession session){
         Long userId = getLoginUserId(session);
         cart.setUserId(userId);
+        LambdaQueryWrapper<Cart> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Cart::getUserId,userId);
+        wrapper.eq(Cart::getProductId,cart.getProductId());
+        Cart one = baseService.getOne(wrapper);
+        if(ObjectUtils.isNotNull(one)){
+            Integer num = one.getNum() + cart.getNum();
+            if(num>100){
+                num=100;
+            }
+            one.setNum(num);
+            baseService.updateById(one);
+            return Result.success();
+        }
         return Result.success(baseService.save(cart));
     }
 

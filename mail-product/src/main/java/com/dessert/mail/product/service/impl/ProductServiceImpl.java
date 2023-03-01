@@ -17,9 +17,15 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
     @Override
     public Result getPage(ProductVo vo) {
-        final LambdaQueryWrapper<Product> wrapper = new LambdaQueryWrapper<>();
         Page<Object> page = new Page<>(vo.getPageNo(), vo.getPageSize());
         IPage<Product> iPage = baseMapper.getPage(page,vo);
+        return Result.success(iPage);
+    }
+
+    @Override
+    public Result allPage(ProductVo vo) {
+        Page<Object> page = new Page<>(vo.getPageNo(), vo.getPageSize());
+        IPage<Product> iPage = baseMapper.getAllPage(page,vo);
         return Result.success(iPage);
     }
 
@@ -30,11 +36,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         if(ObjectUtils.isNotNull(param.getTypeId())&& param.getTypeId()!=0){
             wrapper.eq(Product::getTypeId,param.getTypeId());
         }
-        if(ObjectUtils.isNotNull(param.getIsAdvertisement())){
-            wrapper.eq(Product::getIsAdvertisement,param.getIsAdvertisement());
+        if(ObjectUtils.isNotNull(param.getDescription())){
+            wrapper.eq(Product::getDescription,param.getDescription());
         }
-        if(ObjectUtils.isNotNull(param.getIsRecommend())){
-            wrapper.eq(Product::getIsRecommend,param.getIsRecommend());
+        if(ObjectUtils.isNotNull(param.getIsOnSelf())){
+            wrapper.eq(Product::getIsOnSelf,param.getIsOnSelf());
         }
         wrapper.orderByDesc(Product::getUpdateTime);
     }

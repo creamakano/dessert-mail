@@ -8,4 +8,6 @@ import com.dessert.common.entity.pms.ProductVo;
 
 public interface ProductService extends IService<Product> {
     Result getPage(ProductVo vo);
+
+    Result allPage(ProductVo vo);
 }

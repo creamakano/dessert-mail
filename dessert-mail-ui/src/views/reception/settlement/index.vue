@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import { get ,post} from "../../../tool/http";
+import { get, post } from "../../../tool/http";
 import { ElMessage } from 'element-plus'
 
 const { query } = useRoute()
@@ -10,9 +10,10 @@ function back () {
   route.push('/home/cart')
 }
 const order = reactive({
-  name: '', 
+  name: '',
   phone: '',
-  address: ''
+  address: '',
+  cartIds: query.cartIds
 })
 const hasAddress = ref(false)
 get('/user/address/getDefault').then(res => {
@@ -28,7 +29,6 @@ get('/user/address/getDefault').then(res => {
     }
   }
 })
-
 
 //维护收货信息
 const receipt = ref()
