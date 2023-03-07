@@ -11,6 +11,9 @@ public class BaseController {
     }
     public Long getLoginUserId(HttpSession session){
         LoginUser loginUser = (LoginUser) session.getAttribute("LoginUser");
+        if(loginUser==null){
+            return null;
+        }
         return loginUser.getId();
     }
 }

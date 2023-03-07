@@ -23,11 +23,16 @@ public class LoginController extends BaseController{
         return loginService.userLogin(session,user);
     }
 
+    @PostMapping("/logout")
+    public Result logout(HttpSession session){
+        return loginService.logout(session);
+    }
+
     @GetMapping("/session")
     public Result getSession(HttpSession session){
         LoginUser user = getSessionUser(session);
         if(ObjectUtils.isNull(user)){
-            return Result.error("是否信息过期，请重新登录");
+            return Result.error("身份信息过期，请重新登录");
         }else {
             return Result.success(user);
         }

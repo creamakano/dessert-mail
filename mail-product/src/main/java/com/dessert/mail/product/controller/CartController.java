@@ -8,6 +8,7 @@ import com.dessert.common.entity.pms.CartVo;
 import com.dessert.common.entity.ums.LoginUser;
 import com.dessert.common.entity.ums.User;
 import com.dessert.mail.product.service.CartService;
+import org.codehaus.jackson.sym.NameN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,15 @@ public class CartController extends BaseController{
         Long userId = this.getLoginUserId(session);
         return baseService.getList(userId);
     }
+    @GetMapping("/page")
+    public Result page(CartVo vo , HttpSession session){
+        Long userId = this.getLoginUserId(session);
+        if(userId == null){
+            return Result.unauthorized();
+        }
+        vo.setUserId(userId);
+        return baseService.getPage(vo);
+    }
 
     @PutMapping("/update")
     public Result update(@RequestBody Cart cart){
@@ -40,6 +50,9 @@ public class CartController extends BaseController{
     @PostMapping("/insert")
     public Result insert(@RequestBody Cart cart, HttpSession session){
         Long userId = getLoginUserId(session);
+        if(userId == null){
+            return Result.unauthorized();
+        }
         cart.setUserId(userId);
         LambdaQueryWrapper<Cart> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Cart::getUserId,userId);

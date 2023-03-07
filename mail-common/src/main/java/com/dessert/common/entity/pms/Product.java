@@ -31,7 +31,7 @@ public class Product {
 
     private Long storage;
 
-    private Integer isOnSelf;
+    private Integer Status;
 
     private String description;
 

@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 
 public interface ProductMapper extends BaseMapper<Product> {
-    IPage<Product> getPage(@Param("page") Page<Object> page, @Param("vo") ProductVo vo);
+    IPage<Product> getPage(@Param("page") Page<Product> page, @Param("vo") ProductVo vo);
 
-    IPage<Product> getAllPage(@Param("page") Page<Object> page, @Param("vo") ProductVo vo);
+    IPage<Product> getAllPage(@Param("page") Page<Product> page, @Param("vo") ProductVo vo);
 }

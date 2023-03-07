@@ -1,5 +1,7 @@
 package com.dessert.mail.product.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.dessert.common.entity.common.Result;
@@ -25,5 +27,12 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     public Result<List<CartVo>> getListByIds(List<Long> ids) {
         List<CartVo> list = baseMapper.getListByIds(ids);
         return Result.success(list);
+    }
+
+    @Override
+    public Result getPage(CartVo vo) {
+        Page<CartVo> page = new Page<>(vo.getPageNo(),vo.getPageSize());
+        IPage<CartVo> iPage = baseMapper.getPage(page,vo);
+        return Result.success(iPage);
     }
 }

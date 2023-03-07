@@ -17,7 +17,11 @@ public class CollectionController extends BaseController{
 
     @PostMapping("insert")
     public Result insert(@RequestBody Collection collection,HttpSession session){
-        collection.setUserId(getLoginUserId(session));
+        Long userId = getLoginUserId(session);
+        if(userId == null){
+            return Result.error("身份信息过期，请重新登录");
+        }
+        collection.setUserId(userId);
         return collectionService.insert(collection);
     }
     @DeleteMapping("/deleteByProductId/{id}")

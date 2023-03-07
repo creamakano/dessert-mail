@@ -43,7 +43,7 @@ public class Order implements Serializable {
     private Double total;
 
     /**
-     * 0 未支付 1 已支付
+     *
      */
     private Integer status;
 

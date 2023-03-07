@@ -15,8 +15,7 @@ import LunboComponent from '../../../components/reception/lunbo/index.vue'
 .home {
   background-image: url('../../../assets/images/background.jpg');
   background-size: cover;
-  min-height: 927px;
+  min-height: 935px;
 }
-
 
 </style>

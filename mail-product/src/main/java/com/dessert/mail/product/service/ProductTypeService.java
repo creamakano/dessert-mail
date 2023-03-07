@@ -9,4 +9,9 @@ import com.dessert.common.entity.pms.ProductTypeVo;
 public interface ProductTypeService extends IService<ProductType> {
     Result getPage(ProductTypeVo vo);
 
+    Result updateType(ProductType type);
+
+    Result deleteById(Long id);
+
+    Result insert(ProductType type);
 }

@@ -26,6 +26,12 @@ public class CollectionServiceImpl extends ServiceImpl<CollectionMapper, Collect
 
     @Override
     public Result insert(Collection collection) {
+        LambdaQueryWrapper<Collection> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Collection::getUserId,collection.getUserId());
+        wrapper.eq(Collection::getProductId,collection.getProductId());
+        if(ObjectUtils.isNotEmpty(this.list(wrapper))){
+            return Result.success();
+        }
         collection.setCollectionTime(new Date());
         this.save(collection);
         return Result.success();

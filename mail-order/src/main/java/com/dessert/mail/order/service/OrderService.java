@@ -7,4 +7,6 @@ import com.dessert.common.entity.oms.OrderVo;
 
 public interface OrderService extends IService<Order> {
     Result getPage(OrderVo vo);
+
+    Object confirmReceipt(Order order);
 }

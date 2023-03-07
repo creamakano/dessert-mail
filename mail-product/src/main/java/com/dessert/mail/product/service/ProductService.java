@@ -10,4 +10,10 @@ public interface ProductService extends IService<Product> {
     Result getPage(ProductVo vo);
 
     Result allPage(ProductVo vo);
+
+    Result updateProduct(Product product);
+
+    Result insert(Product product);
+
+    Result delete(Long id);
 }

@@ -28,4 +28,9 @@ body {
 .el-table--enable-row-hover .el-table__body tr:hover>td {
   background-color: rgb(245, 222, 207) !important;
 }
+
+.el-textarea__inner {
+  background-color: #fff7f1 !important;
+}
+
 </style>

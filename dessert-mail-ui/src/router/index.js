@@ -52,6 +52,10 @@ const router = createRouter({
           path: 'link',
           component: () => import('../views/reception/link/index.vue')
         },
+        {
+          path: 'comment',
+          component: () => import('../views/reception/comment/index.vue')
+        },
 
       ]
     },
@@ -81,6 +85,18 @@ const router = createRouter({
           path: 'product',
           component: () => import('../views/backstage/product/index.vue')
         },
+        {
+          path: 'order',
+          component: () => import('../views/backstage/order/index.vue')
+        },
+        {
+          path: 'user',
+          component: () => import('../views/backstage/user/index.vue')
+        },
+        {
+          path: 'comment',
+          component: () => import('../views/backstage/comment/index.vue')
+        },
       ]
     }
   ]
@@ -103,26 +119,26 @@ const router = createRouter({
 
 
 
-// router.beforeEach(async (to, from, next) => {
-//   if (to.path != '/') {
-//     if (store.state.userInfo.auth == '') {
-//       await awaitGet('/user/login/session').then(res => {
-//         if (res.code == 200) {
-//           store.commit("setUserInfo", res.data)
-//         } else {
-//           ElMessage.error(res.msg)
-//           router.push('/')
-//         }
-//       })
-//     }
-//     if (to.path == '/home/link' && store.state.userInfo.auth != null && store.state.userInfo.auth < 1) {
-//       ElMessage.error("权限不足")
-//       router.push('/home')
-//     }
-//   }
+router.beforeEach(async (to, from, next) => {
+  if (to.path != '/' && to.path != '/home' && to.path != '/home/productDetail') {
+    if (store.state.userInfo.auth == '') {
+      await awaitGet('/user/login/session').then(res => {
+        if (res.code == 200) {
+          store.commit("setUserInfo", res.data)
+        } else {
+          ElMessage.error(res.msg)
+          router.push('/home')
+        }
+      })
+    }
+    if (to.path == '/back/' && store.state.userInfo.auth != null && store.state.userInfo.auth < 1) {
+      ElMessage.error("权限不足")
+      router.push('/home')
+    }
+  }
 
-//   next()//需要调用next()才能放行
-// })
+  next()//需要调用next()才能放行
+})
 
 
 

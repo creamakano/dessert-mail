@@ -36,6 +36,10 @@ public class Result<T> implements Serializable {
         return error("参数错误");
     }
 
+    public static Result unauthorized () {
+        return error("身份信息过期，请重新登录");
+    }
+
     public static <T> Result<T> error(Integer code ,String msg) {
         return new Result<>(code,msg);
     }

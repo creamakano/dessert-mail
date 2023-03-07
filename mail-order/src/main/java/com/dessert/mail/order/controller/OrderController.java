@@ -5,14 +5,9 @@ import com.dessert.common.entity.oms.Order;
 import com.dessert.common.entity.oms.OrderVo;
 import com.dessert.mail.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.xml.crypto.Data;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @RestController
 @RequestMapping("order")
@@ -27,8 +22,30 @@ public class OrderController extends BaseController{
         vo.setUserId(userId);
         return orderService.getPage(vo);
     }
+    @PutMapping("")
+    private Result update(@RequestBody Order order){
+        return Result.success(orderService.updateById(order));
+    }
+    @DeleteMapping("/{id}")
+    private Result detail(@PathVariable("id") Long id){
+        return Result.success(orderService.removeById(id));
+    }
+    @GetMapping("/{id}")
+    private Result delete(@PathVariable("id") Long id){
+        return Result.success(orderService.getById(id));
+    }
     @GetMapping("/allPage")
     private Result allPage(OrderVo vo){
         return orderService.getPage(vo);
+    }
+
+    @PutMapping("/send")
+    private Result send(@RequestBody Order order){
+        order.setStatus(2);
+        return Result.success(orderService.updateById(order));
+    }
+    @PutMapping("/confirmReceipt")
+    private Result confirmReceipt(@RequestBody Order order){
+        return Result.success(orderService.confirmReceipt(order));
     }
 }

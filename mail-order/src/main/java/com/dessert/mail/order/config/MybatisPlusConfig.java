@@ -1,4 +1,4 @@
-package com.dessert.mail.product.config;
+package com.dessert.mail.order.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

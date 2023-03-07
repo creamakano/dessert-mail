@@ -86,6 +86,7 @@ public class PayServiceImpl extends ServiceImpl<OrderMapper, Order> implements P
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
         //这里设置支付后跳转的地址
         alipayRequest.setReturnUrl(AlipayConfig.return_url);
+        alipayRequest.setNotifyUrl(AlipayConfig.notify_url);
         String out_trade_no = order.getOrderNum();
         String total_amount = String.valueOf(order.getTotal());
         String subject = "甜品商城订单";

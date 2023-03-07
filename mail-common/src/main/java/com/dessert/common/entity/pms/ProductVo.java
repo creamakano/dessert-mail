@@ -28,7 +28,7 @@ public class ProductVo extends BaseVo {
 
     private Long storage;
 
-    private Integer isOnSelf;
+    private Integer Status;
 
     private String description;
 

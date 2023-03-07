@@ -2,6 +2,7 @@ package com.dessert.common.entity.ums;
 
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.dessert.common.entity.common.BaseVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,8 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 @Data
-@Accessors(chain = true)
-@AllArgsConstructor
-@NoArgsConstructor
-@TableName("ums_user")
-public class User implements Serializable {
+public class UserVo extends BaseVo implements Serializable {
 
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     private String name;
@@ -32,6 +28,4 @@ public class User implements Serializable {
     @TableLogic(value = "0",delval = "1")
     private Integer isDeleted;
 
-    @TableField(exist = false)
-    private String newPassword;
 }

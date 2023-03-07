@@ -30,7 +30,7 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  mapper-locations: classpath*:com/dessert/product/mapper/*.xml
+  mapper-locations: classpath*:com/dessert/order/mapper/*.xml
   global-config:
     db-config:
       #配置主键自增规则

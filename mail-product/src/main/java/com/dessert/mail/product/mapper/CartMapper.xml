@@ -23,4 +23,14 @@
         </where>
 
     </select>
+    <select id="getPage" resultType="com.dessert.common.entity.pms.CartVo">
+        select a.* , b.name as productName , b.price , b.discount
+        from pms_cart a
+        join pms_product b on a.product_id = b.id
+        <where>
+            and a.is_deleted = 0
+            and a.user_id = #{vo.userId}
+        </where>
+    </select>
+
 </mapper>

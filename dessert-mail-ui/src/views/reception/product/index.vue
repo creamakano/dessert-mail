@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { get, post, del } from '../../../tool/http.js'
 import { ElMessage } from 'element-plus'
-import { Star, StarFilled } from '@element-plus/icons-vue'
+import { Star, StarFilled, Search, Refresh } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
+
 const route = useRouter()
 //商品分类
 const productType = ref([])
@@ -12,50 +13,51 @@ get('/product/type/list').then((res) => {
 }).catch(err => {
   ElMessage.error(err)
 })
+const queryForm = reactive({
+  name: null,
+  pageSize: 10,
+  pageNo: 1,
+  typeId: 0,
+  total: 0
+})
 //获取商品数据函数
-function getProductList () {
-  const param = {}
-  param.pageSize = pageSize.value,
-    param.pageNo = currentPage.value,
-    param.typeId = type.value,
-    get('/product/product/page', param).then(res => [
-      productList.value = res.data.records,
-      currentPage.value = res.data.current,
-      pageSize.value = res.data.size,
-      total.value = res.data.total
-    ])
+function getPage () {
+  get('/product/product/page', queryForm).then(res => [
+    productList.value = res.data.records,
+    queryForm.pageNo = res.data.current,
+    queryForm.pageSize = res.data.size,
+    queryForm.total = res.data.total
+  ])
 }
-// 分页信息
-
-const currentPage = ref(1)
-const total = ref(0)
-const pageSize = ref(10)
-
+//重置
+function queryReset(){
+  queryForm.name = null
+  getPage()
+}
 
 //菜单默认值
 const activeIndex = ref('0')
-const type = ref(0)
 
 //商品数据
 const productList = ref([])
 const param = {}
-getProductList()
+getPage()
 const selectType = (key) => {
-  type.value = key;
-  getProductList(param)
+  queryForm.typeId = key;
+  getPage(param)
 }
 
 
 
 //分页信息改变
 function handleCurrentChange (val) {
-  currentPage.value = val
-  getProductList()
+  queryForm.pageNo = val
+  getPage()
 }
 
 function handleSizeChange (val) {
-  pageSize.value = val
-  getProductList()
+  queryForm.pageSize = val
+  getPage()
 }
 
 //收藏
@@ -101,7 +103,7 @@ function addToCart (id) {
 function goToProductDetail (id) {
   route.push({
     path: '/home/productDetail',
-    query: {id:id}
+    query: { id: id }
   })
 }
 </script>
@@ -110,11 +112,26 @@ function goToProductDetail (id) {
 
 <template>
   <div>
-    <div class="product-type">
-      <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="selectType">
-        <el-menu-item index="0">所有商品</el-menu-item>
-        <el-menu-item v-for="(val) in productType" :key='val.id' :index='val.id'>{{ val.name }}</el-menu-item>
-      </el-menu>
+    <div class="menu-c">
+      <div class="menu">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="selectType">
+          <el-menu-item index="0">所有商品</el-menu-item>
+          <el-menu-item v-for="(val) in productType" :key='val.id' :index='val.id'>{{ val.name }}</el-menu-item>
+        </el-menu>
+      </div>
+      <div class="query-line">
+        <el-form :inline="true" :model="queryForm" class="demo-form-inline form">
+          <el-form-item label="商品名称">
+            <el-input v-model="queryForm.name" placeholder="" />
+          </el-form-item>
+          <el-form-item>
+            <el-button :icon="Search" circle @click="getPage" /> <el-button :icon="Refresh" circle @click="queryReset" />
+          </el-form-item>
+
+        </el-form>
+
+
+      </div>
     </div>
     <div class="content-c">
       <div class="content">
@@ -132,15 +149,16 @@ function goToProductDetail (id) {
           <el-icon v-if="val.isCollection == 0" class="star" size="25px" @click="star(val.id, val)" color="white">
             <Star />
           </el-icon>
-          <el-icon v-else class="star" size="28px" @click="starCancel(val.id, val)" color="red">
+          <el-icon v-if="val.isCollection == 1" class="star" size="28px" @click="starCancel(val.id, val)" color="red">
             <StarFilled />
           </el-icon>
           <el-button type="primary" @click="addToCart(val.id)">加入购物车</el-button>
         </div>
         <div class="bottom-c">
-          <el-pagination :current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20, 50]" :small="small"
-            :disabled="disabled" :background="true" layout="total, sizes, prev, pager, next, jumper" :total="total"
-            @size-change="handleSizeChange" @current-change="handleCurrentChange" class="bottom"></el-pagination>
+          <el-pagination :current-page="queryForm.pageNo" :page-size="queryForm.pageSize" :page-sizes="[10, 20, 50]"
+            :small="small" :disabled="disabled" :background="true" layout="total, sizes, prev, pager, next, jumper"
+            :total="queryForm.total" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            class="bottom"></el-pagination>
         </div>
       </div>
 
@@ -152,6 +170,34 @@ function goToProductDetail (id) {
 </template>
 
 <style scoped>
+.flex-grow {
+  flex-grow: 1;
+}
+
+.menu-c {
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu {
+  width: 1800px;
+}
+
+.query-line {
+  height: 58px;
+  line-height: 58px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 500px;
+}
+
+.form {
+  height: 40px;
+}
+
 .content-c {
   width: 100%;
 

@@ -12,4 +12,6 @@ public interface CartService extends IService<Cart> {
     Result getList(Long userId);
 
     Result<List<CartVo>> getListByIds(List<Long> ids);
+
+    Result getPage(CartVo vo);
 }

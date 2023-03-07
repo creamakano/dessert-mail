@@ -1,13 +1,16 @@
 <script setup>
+import { ElMessage } from "element-plus";
 import { ref, reactive } from "vue";
 import { get, post, del, put } from "../../../tool/http";
+import { Search, Refresh } from '@element-plus/icons-vue'
 
 const typeList = ref()
 //获取页面数据
 const queryForm = reactive({
   pageNo: 0,
   pageSize: 10,
-  total: 0
+  total: 0,
+  name: null
 
 })
 function getPage () {
@@ -20,14 +23,75 @@ function getPage () {
   })
 }
 getPage()
-
-
-function openUpdateModel (row) {
+//重置表单
+function queryReset () {
+  queryForm.name = ''
+  queryForm.typeId = ''
+  getPage()
+}
+//类型编辑
+const updateDialog = ref(false)
+const updateTypeForm = reactive({
+  id: '',
+  name: ''
+})
+function openUpdateDialog (row) {
+  updateTypeForm.id = row.id
+  updateTypeForm.name = row.name
+  updateDialog.value = true
+}
+function updateType () {
+  put('/product/type/update', updateTypeForm).then(res => {
+    if (res.code == 200) {
+      getPage()
+      updateDialog.value = false
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
+}
+function handleClose () {
+  updateTypeForm.id = null
+  updateTypeForm.name = null
+  updateDialog.value = false
 
 }
+
+//类型新增
+const insertDialog = ref(false)
+const insertTypeForm = reactive({
+  name: ''
+})
+function openInsertDialog () {
+  insertDialog.value = true
+}
+function insertType () {
+  post('/product/type/insert', insertTypeForm).then(res => {
+    if (res.code == 200) {
+      getPage()
+      insertDialog.value = false
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
+}
+function handleInsertClose () {
+  insertTypeForm.name = null
+  insertDialog.value = false
+}
+
+
+//删除类型
 function deleteType (id) {
-
+  del(`/product/type/delete/${id}`).then(res => {
+    if (res.code == 200) {
+      getPage()
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
 }
+
 
 
 //分页信息修改
@@ -39,6 +103,8 @@ function handlePageChange (val) {
   queryForm.pageNo = val;
   getPage()
 }
+
+
 </script>
 
 <template>
@@ -48,10 +114,21 @@ function handlePageChange (val) {
 
     <div class="content">
       <div class="query-line">
-        <el-button size="small" plain>新增</el-button>
-        <div class="query-array">
-          <el-input v-model="queryForm.name" placeholder="类型名称" size="small" class="query-item" clearable @blur="getPage" />
-        </div>
+        <el-form :inline="true" :model="queryForm" class="demo-form-inline">
+          <el-form-item label="类型名称">
+            <el-input v-model="queryForm.name" placeholder="" />
+          </el-form-item>
+
+
+          <el-form-item>
+            <el-button :icon="Search" circle @click="getPage" /> <el-button :icon="Refresh" circle @click="queryReset" />
+          </el-form-item>
+
+        </el-form>
+
+        <el-form-item>
+          <el-button type="warning" size="" plain @click="insertDialog = true">添加</el-button>
+        </el-form-item>
       </div>
       <el-table :data="typeList" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ 'text-align': 'center' }"
         :row-style="{ 'height': '42px' }" :header-row-style="{ 'height': '42px' }" height="465">
@@ -59,7 +136,7 @@ function handlePageChange (val) {
         <el-table-column prop="name" label="类型名称" />
         <el-table-column label="操作">
           <template v-slot="scope">
-            <el-button type="warning" size="small" @click="openUpdateModel(scope.row)">修改</el-button>
+            <el-button type="warning" size="small" @click="openUpdateDialog(scope.row)">修改</el-button>
             <el-button type="danger" size="small" @click="deleteType(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -71,6 +148,43 @@ function handlePageChange (val) {
         @size-change="handleSizeChange" @current-change="handlePageChange" class="bottom"></el-pagination>
     </div>
   </div>
+
+
+
+  <el-dialog v-model="updateDialog" title="编辑类型" width="30%" :before-close="handleClose">
+    <el-form :label-position="right" label-width="100px" :model="updateTypeForm" style="max-width: 460px">
+      <el-form-item label="类型ID">
+        <el-input v-model="updateTypeForm.id" disabled />
+      </el-form-item>
+      <el-form-item label="类型名称">
+        <el-input v-model="updateTypeForm.name" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="updateDialog = false">取消</el-button>
+        <el-button type="primary" @click="updateType()">
+          确定
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
+
+  <el-dialog v-model="insertDialog" title="新增类型" width="30%" :before-close="handleInsertClose">
+    <el-form :label-position="right" label-width="100px" :model="insertTypeForm" style="max-width: 460px">
+      <el-form-item label="类型名称">
+        <el-input v-model="insertTypeForm.name" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="insertDialog = false">取消</el-button>
+        <el-button type="primary" @click="insertType()">
+          确定
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>
@@ -102,12 +216,12 @@ function handlePageChange (val) {
   padding-bottom: 20px;
 }
 
+
 .query-line {
+  border-bottom: 2px dotted rgb(221, 126, 107);
+  padding: 0 150px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
-}
-
-.query-item {
-  width: 100px;
 }
 </style>

@@ -13,6 +13,8 @@ import com.dessert.mail.order.mapper.OrderMapper;
 import com.dessert.mail.order.service.OrderService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
@@ -22,6 +24,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         buildCondition(vo, wrapper);
         IPage<Order> page = this.page(new Page<>(vo.getPageNo(), vo.getPageSize()), wrapper);
         return Result.success(page);
+    }
+
+    @Override
+    public Object confirmReceipt(Order order) {
+        order.setStatus(4);
+        this.updateById(order);
+        return Result.success();
     }
 
     private void buildCondition(OrderVo vo, LambdaQueryWrapper<Order> wrapper) {
@@ -40,8 +49,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         if(vo.getIsComment()!=null){
             wrapper.eq(Order::getIsComment, vo.getIsComment());
         }
-        if(vo.getStatus()!=null){
+        if(vo.getStatus()!=null&&vo.getStatus()!=0){
             wrapper.eq(Order::getStatus, vo.getStatus());
+        }
+        if(vo.getStartTime()!=null){
+            wrapper.ge(Order::getDate,vo.getStartTime());
+        }
+        if(vo.getEndTime()!=null){
+            wrapper.le(Order::getDate,new Date(vo.getEndTime().getTime()+86400000));
         }
         wrapper.orderByDesc(Order::getDate);
     }

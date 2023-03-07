@@ -4,16 +4,10 @@ package com.dessert.mail.product.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dessert.common.entity.pms.Cart;
-import com.dessert.common.entity.pms.CartVo;
+import com.dessert.common.entity.pms.Comment;
+import com.dessert.common.entity.pms.CommentVo;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
-public interface CartMapper extends BaseMapper<Cart> {
-    List<CartVo> getList(@Param("userId") Long userId);
-
-    List<CartVo> getListByIds(List<Long> ids);
-
-    IPage<CartVo> getPage(@Param("page") Page<CartVo> page, @Param("vo") CartVo vo);
+public interface CommentMapper extends BaseMapper<Comment> {
+    IPage<Comment> getPage(@Param("page") Page<Comment> page, @Param("vo") CommentVo vo);
 }

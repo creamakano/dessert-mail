@@ -9,14 +9,34 @@
 
 <script setup>
 import { ElMessage } from 'element-plus';
-import { ref } from 'vue';
+import { ref, toRef, watch } from 'vue';
 import { defineEmits } from 'vue'
-const emit = defineEmits(['sendUrl'])
-const imageUrl = ref("")
+
+const props = defineProps({
+  picture: String,
+  src: String
+})
+console.log(props.src);
+const emit = defineEmits(['sendUrl', 'sendInsertUrl'])
+const imageUrl = ref('/src/assets/images/' + props.picture)
+const src = ref(props.src)
+watch(() => props.picture, (newVal, oldVal) => {
+  if (newVal != null && newVal != '') {
+    imageUrl.value = '/src/assets/images/' + newVal
+  }
+})
+if(props.picture==null || props.picture == ''){
+  imageUrl.value = ''
+}
+
+
 function handleAvatarSuccess (res, file) {
-  imageUrl.value = URL.createObjectURL(file.raw);
-  console.log(res);
-  emit('sendUrl',res)
+  imageUrl.value = "/src/assets/images/" + res
+  if (src.value == 'insert') {
+    emit('sendInsertUrl', res)
+  } else {
+    emit('sendUrl', res)
+  }
 }
 function beforeAvatarUpload (file) {
   const isLt2M = file.size / 1024 / 1024 < 2;

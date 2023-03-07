@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.dessert.mail.product.mapper.CommentMapper" >
+<mapper namespace="com.dessert.mail.product.mapper.CommentMapper">
+    <select id="getPage" resultType="com.dessert.common.entity.pms.Comment">
+        SELECT a.* ,b.name as userName
+        FROM pms_comment a
+                 JOIN dessertmail_ums.ums_user b ON a.user_id = b.id
+        <where>
+            and a.is_deleted = 0
+            and a.product_id = #{vo.productId}
+        </where>
+
+    </select>
 </mapper>

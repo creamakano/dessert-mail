@@ -13,4 +13,5 @@ public interface LoginService extends IService<User> {
 
     Result userLogin(HttpSession session, User user);
 
+    Result logout(HttpSession session);
 }

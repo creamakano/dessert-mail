@@ -10,10 +10,7 @@ import com.dessert.common.entity.pms.ProductVo;
 import com.dessert.mail.product.service.ProductService;
 import com.dessert.mail.product.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -29,7 +26,9 @@ public class ProductController extends BaseController {
 
     @GetMapping("/page")
     public Result page(ProductVo vo,HttpSession session){
-        vo.setUserId(this.getLoginUserId(session));
+        if(this.getLoginUserId(session)!=null){
+            vo.setUserId(this.getLoginUserId(session));
+        }
         return productService.getPage(vo);
     }
 
@@ -48,5 +47,18 @@ public class ProductController extends BaseController {
         Product product = productService.getById(id);
         product.setType(typeService.getById(product.getTypeId()).getName());
         return Result.success(product);
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody Product product){
+        return productService.updateProduct(product);
+    }
+    @PostMapping("/insert")
+    public Result insert(@RequestBody Product product){
+        return productService.insert(product);
+    }
+    @DeleteMapping("/delete/{id}")
+    public Result insert(@PathVariable("id") Long id){
+        return productService.delete(id);
     }
 }

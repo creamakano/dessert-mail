@@ -32,4 +32,10 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         session.setAttribute("LoginUser",loginUser);
         return Result.success(loginUser);
     }
+
+    @Override
+    public Result logout(HttpSession session) {
+        session.removeAttribute("LoginUser");
+        return Result.success();
+    }
 }

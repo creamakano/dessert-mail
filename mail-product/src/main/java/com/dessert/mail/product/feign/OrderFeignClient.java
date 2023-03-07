@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@FeignClient("mail-product")//服务名
+@FeignClient("mail-order")//服务名
 public interface OrderFeignClient {
-    @GetMapping("/product/cart/getListByIds")
-    Result<List<CartVo>> getListByIds(@RequestParam ("ids")List<Long> ids);
+    @GetMapping("/order/orderDetail/updateCommentStatus")
+    Integer updateCommentStatus(@RequestParam ("id")Long id);
 }

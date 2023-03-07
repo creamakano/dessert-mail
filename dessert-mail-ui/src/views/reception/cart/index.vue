@@ -1,19 +1,42 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { get, put, del, post } from '../../../tool/http.js'
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
 const route = useRouter()
 const store = useStore()
+
+
+const queryForm = reactive({
+  pageNo: 1,
+  pageSize: 10,
+  total: 0
+})
+
 //购物车数据
 const cartList = ref([])
-function loadCartList () {
-  get('/product/cart/list', { userId: store.state.userInfo.id }).then((res) => {
-    cartList.value = res.data
+function getPage () {
+  get('/product/cart/page', queryForm).then((res) => {
+    if (res.code == 200) {
+      var data = res.data
+      cartList.value = data.records
+      queryForm.total = data.total
+    } else {
+      ElMessage.error(res.msg)
+    }
   })
 }
-loadCartList()
+getPage()
+//分页信息改变
+function handleSizeChange (val) {
+  queryForm.pageSize = val
+  getPage()
+}
+function handlePageChange (val) {
+  queryForm.pageNo = val
+  getPage()
+}
 
 
 //购物车商品数量改变
@@ -27,7 +50,7 @@ function handleChange (id, num) {
 function deleteOneCart (id) {
   del(`/product/cart/delete/${id}`).then(res => {
     ElMessage.success('删除成功')
-    loadCartList()
+    getPage()
   })
 }
 
@@ -38,7 +61,7 @@ function selectionChange (v) {
 
 //结算
 function settlement () {
-  if(selectionList.value.length==0){
+  if (selectionList.value.length == 0) {
     ElMessage.error("请选择要结算的商品")
     return;
   }
@@ -58,63 +81,106 @@ function settlement () {
 //总数
 const total = computed(() => {
   let count = 0
-  if(selectionList.value.length != 0){
+  if (selectionList.value.length != 0) {
     for (let i = 0; i < selectionList.value.length; i++) {
-    count = count + selectionList.value[i].price * selectionList.value[i].discount * selectionList.value[i].num
+      count = count + selectionList.value[i].price * selectionList.value[i].discount * selectionList.value[i].num
+    }
   }
-  }
-  
+
   return count;
 })
 
 </script>
 
 <template>
-  <div style="text-align: center;">
-    <h1 style="color:rgb(221, 126, 107);  padding-top: 60px;padding-bottom: 20px;">我的购物车</h1>
-  </div>
-  <div class="cart-c">
+  <div class="all-c">
+    <div class="content-c">
 
-    <div class="cart">
-      <el-table :data="cartList" style="width: 100%" :cell-style="{ textAlign: 'center' }"
-        :header-cell-style="{ 'text-align': 'center' }" @selection-change="selectionChange">
-        <el-table-column type="selection" width="55" />
-        <el-table-column prop="productName" label="商品名称" width="180" />
-        <el-table-column prop="price" label="商品价格" width="180" />
-        <el-table-column label="优惠" width="180">
-          <template v-slot="scope">
-            {{ scope.row.discount * scope.row.price }}
-          </template>
-        </el-table-column>
-        <el-table-column label="数量" width="180">
-          <template v-slot="scope">
-            <el-input-number v-model="scope.row.num" @change="handleChange(scope.row.id, scope.row.num)" :min="1"
-              :max="100"></el-input-number>
-          </template>
-        </el-table-column>
+      <div class="title">我的购物车</div>
 
-        <el-table-column label="小计" width="180">
-          <template v-slot="scope">
-            {{ scope.row.discount * scope.row.price * scope.row.num }}
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="180">
-          <template v-slot="scope">
-            <el-button size="small" type="danger" @click="deleteOneCart(scope.row.id)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="total">购物金额总计：￥{{ total }}</div>
-      <div class="total"><el-button type="primary" @click="settlement()">去结算</el-button></div>
+      <div class="content">
+        <el-table :data="cartList" style="width: 100%" :cell-style="{ textAlign: 'center' }"
+          :header-cell-style="{ 'text-align': 'center' }" @selection-change="selectionChange">
+          <el-table-column type="selection" />
+          <el-table-column prop="productName" label="商品名称" />
+          <el-table-column prop="price" label="商品价格" />
+          <el-table-column label="优惠">
+            <template v-slot="scope">
+              {{ scope.row.discount * scope.row.price }}
+            </template>
+          </el-table-column>
+          <el-table-column label="数量">
+            <template v-slot="scope">
+              <el-input-number v-model="scope.row.num" @change="handleChange(scope.row.id, scope.row.num)" :min="1"
+                :max="100"></el-input-number>
+            </template>
+          </el-table-column>
+
+          <el-table-column label="小计">
+            <template v-slot="scope">
+              {{ scope.row.discount * scope.row.price * scope.row.num }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template v-slot="scope">
+              <el-button size="small" type="danger" @click="deleteOneCart(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="total">购物金额总计：￥{{ total }}</div>
+        <div class="total"><el-button type="primary" @click="settlement()">去结算</el-button></div>
+      </div>
+      <div class="bottom-c">
+        <el-pagination :current-page="queryForm.pageNo" :page-size="queryForm.pageSize" :page-sizes="[5, 10, 20, 50]"
+          :disabled="disabled" :background="true" layout="total, sizes, prev, pager, next, jumper"
+          :total="queryForm.total" @size-change="handleSizeChange" @current-change="handlePageChange"
+          class="bottom"></el-pagination>
+      </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-.cart-c {
+.all-c {
+  padding: 40px 0;
+}
+
+.content-c {
+  border: 1px solid rgb(221, 126, 107);
+  width: 1400px;
+  margin: 0 auto;
+}
+
+.title {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 20px;
+  box-sizing: border-box;
+  background-color: rgb(221, 126, 107);
+  color: aliceblue;
+}
+
+.content {
+  padding: 15px;
+}
+
+.bottom-c {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: end;
+  padding-top: 10px;
+  box-sizing: border-box;
+  padding-bottom: 20px;
+}
+
+
+.query-line {
+  border-bottom: 2px dotted rgb(221, 126, 107);
+  padding: 0 60px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 }
 
 .total {
