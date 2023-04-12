@@ -3,6 +3,7 @@ package com.dessert.mail.user.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.dessert.common.entity.common.Result;
+import com.dessert.common.entity.ums.LoginUser;
 import com.dessert.common.entity.ums.User;
 import com.dessert.common.entity.ums.UserVo;
 import com.dessert.mail.user.service.UserService;
@@ -29,6 +30,19 @@ public class UserController extends BaseController{
             userService.updateById(originalUser);
             return Result.error("必须存在一位管理员用户");
         }
+        return Result.success();
+    }
+    @PutMapping("/updateUserInfo")
+    public Result updateUserInfo(@RequestBody User user,HttpSession session){
+        userService.updateById(user);
+        User checkUser = userService.getById(user.getId());
+        LoginUser loginUser = new LoginUser();
+        loginUser.setId(checkUser.getId());
+        loginUser.setMail(checkUser.getMail());
+        loginUser.setName(checkUser.getName());
+        loginUser.setPhone(checkUser.getPhone());
+        loginUser.setAuth(checkUser.getAuth());
+        session.setAttribute("LoginUser",loginUser);
         return Result.success();
     }
 

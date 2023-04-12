@@ -12,7 +12,13 @@ get('/user/sys/dict', {
 }).then(res => {
   orderStatus.value = res.data
 })
-
+const statusType = reactive({
+  1: 'danger',
+  2: 'info',
+  3: '',
+  4: 'warning',
+  5: 'success'
+})
 
 const productList = ref()
 const times = ref()
@@ -150,13 +156,13 @@ function handlePageChange (val) {
       <el-table :data="productList" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ 'text-align': 'center' }"
         :row-style="{ 'height': '42px' }" :header-row-style="{ 'height': '42px' }" height="465">
 
-        <el-table-column prop="id" label="订单ID" />
+        <el-table-column type="index" />
         <el-table-column prop="orderNum" label="订单编号" show-overflow-tooltip />
         <el-table-column prop="date" label="下单时间" show-overflow-tooltip />
         <el-table-column prop="total" label="订单金额" />
         <el-table-column prop="status" label="订单状态">
           <template v-slot="scope">
-            {{ orderStatus[scope.row.status] }}
+            <el-tag effect="light" :type="statusType[scope.row.status]">{{ orderStatus[scope.row.status] }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="description" label="订单描述" show-overflow-tooltip />
@@ -164,7 +170,7 @@ function handlePageChange (val) {
           <template v-slot="scope">
             <el-button type="warning" size="small" @click="openUpdateForm(scope.row)">编辑</el-button>
             <el-button type="danger" size="small" @click="deleteOrder(scope.row.id)">删除</el-button>
-            <el-button v-if="scope.row.status == 1" type="success" size="small" @click="send(scope.row.id)">发货</el-button>
+            <el-button v-if="scope.row.status == 2" type="success" size="small" @click="send(scope.row.id)">发货</el-button>
           </template>
         </el-table-column>
       </el-table>

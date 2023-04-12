@@ -10,4 +10,6 @@ import org.apache.ibatis.annotations.Param;
 
 public interface CommentMapper extends BaseMapper<Comment> {
     IPage<Comment> getPage(@Param("page") Page<Comment> page, @Param("vo") CommentVo vo);
+
+    IPage<Comment> getAllPage(@Param("page") Page<Comment> page, @Param("vo") CommentVo vo);
 }

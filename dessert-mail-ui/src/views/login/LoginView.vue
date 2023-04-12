@@ -20,23 +20,24 @@ function login () {
       ElMessage.error(res.msg)
     } else {
       ElMessage.success(res.msg)
-
-      // get('/user/session/getSession').then(res => {
-      //   console.log(res.data);
-      //   
-
-      //   console.log(store.state.userInfo);
-      // })
       store.commit("setUserInfo", res.data)
       window.sessionStorage.setItem("user", res.data)
-      route.push({
-        path: 'home'
-      })
+      if (res.data.auth > 0) {
+        route.push('/back')
+      } else {
+        route.push({
+          path: 'home'
+        })
+
+      }
 
     }
   }).catch(err => {
     ElMessage.error(err)
   })
+}
+function registry () {
+  route.push('/registry')
 }
 </script>
 
@@ -62,8 +63,8 @@ function login () {
 
         </el-form-item>
         <!-- <el-form-item label="验证码" class="login-item code">
-              <el-input v-model="loginForm.code" type="text" placeholder="请输入验证码" />
-            </el-form-item> -->
+                  <el-input v-model="loginForm.code" type="text" placeholder="请输入验证码" />
+                </el-form-item> -->
 
       </el-form>
 

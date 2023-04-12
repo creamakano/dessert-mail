@@ -14,4 +14,8 @@ public interface LoginService extends IService<User> {
     Result userLogin(HttpSession session, User user);
 
     Result logout(HttpSession session);
+
+    Result getCode(String mail, HttpSession session);
+
+    Result registry(User user, HttpSession session);
 }

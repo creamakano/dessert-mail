@@ -2,7 +2,7 @@
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { get, put } from '../../../tool/http';
+import { get, put ,post } from '../../../tool/http';
 const { query } = useRoute()
 const route = useRouter()
 const orderList = ref()
@@ -86,6 +86,15 @@ function comment (id) {
     }
   })
 }
+function pay (id) {
+
+  post('/order/pay/alipay', {
+    id: id
+  }).then(res => {
+    document.querySelector('body').innerHTML = res.data
+    document.forms[0].submit()
+  })
+}
 </script>
 
 <template>
@@ -121,7 +130,8 @@ function comment (id) {
           </el-table-column>
           <el-table-column label="操作">
             <template v-slot="scope">
-              <el-button v-if="scope.row.status == 1" type="danger" size="small" @click="pay(scope.row.id)">支付</el-button>
+              <el-button v-if="scope.row.status == 1" type="danger" size="small"
+                @click.native.stop="pay(scope.row.id)">支付</el-button>
               <!-- <el-button type="warning" size="small" @click="toOrderDetail(scope.row.id)">详情</el-button> -->
               <el-button v-else-if="scope.row.status == 3" type="primary" size="small"
                 @click.native.stop="confirmReceipt(scope.row.id)">确认收货</el-button>

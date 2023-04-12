@@ -13,4 +13,6 @@ import java.util.List;
 public interface ProductFeignClient {
     @GetMapping("/product/cart/getListByIds")
     Result<List<CartVo>> getListByIds(@RequestParam ("ids")List<Long> ids);
+    @GetMapping("/product/cart/cartSubmitByIds")
+    Result<List<CartVo>> cartSubmitByIds(@RequestParam ("ids")List<Long> ids);
 }

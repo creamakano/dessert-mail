@@ -37,4 +37,14 @@ public class CommentController extends BaseController{
     public Result page(CommentVo vo){
         return baseService.getPage(vo);
     }
+
+    @GetMapping("/allPage")
+    public Result allPage(CommentVo vo){
+        return baseService.getAllPage(vo);
+    }
+    @DeleteMapping("/delete/{id}")
+    public Result deleteById(@PathVariable("id") Long id ){
+        baseService.removeById(id);
+        return Result.success();
+    }
 }

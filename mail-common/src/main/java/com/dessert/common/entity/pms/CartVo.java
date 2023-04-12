@@ -11,12 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Accessors(chain = true)
-@TableName("pms_cart")
 public class CartVo extends BaseVo {
 
     private Long id;
@@ -58,5 +55,9 @@ public class CartVo extends BaseVo {
     private Double discount;
     private String picture;
 
+    private List<Long> ids;
 
+    private Integer status;
+
+    private Integer storage;
 }

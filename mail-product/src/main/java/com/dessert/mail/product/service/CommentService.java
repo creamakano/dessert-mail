@@ -15,4 +15,5 @@ public interface CommentService extends IService<Comment> {
 
     Result getPage(CommentVo vo);
 
+    Result getAllPage(CommentVo vo);
 }

@@ -26,11 +26,15 @@ public class ProductVo extends BaseVo {
 
     private double discount;
 
-    private Long storage;
+    private Integer storage;
 
     private Integer Status;
 
     private String description;
+
+    private String quantity;
+
+    private Integer weight;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

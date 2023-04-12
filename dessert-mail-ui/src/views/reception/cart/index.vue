@@ -66,16 +66,13 @@ function settlement () {
     return;
   }
   var cartIds = selectionList.value.map(item => item.id);
-  post('/order/pay/settlement', {
-    cartIds: cartIds
-  }).then(res => {
-    if (res.code == 200) {
-      route.push({
-        path: '/home/settlement',
-        query: res.data
-      })
-    }
+  console.log(cartIds);
+  route.push({
+    path: '/home/settlement',
+    query: cartIds
   })
+
+
 }
 
 //总数
@@ -90,6 +87,10 @@ const total = computed(() => {
   return count;
 })
 
+
+function checkOnSelf (row, index) {
+  return row.status == 1
+}
 </script>
 
 <template>
@@ -101,8 +102,13 @@ const total = computed(() => {
       <div class="content">
         <el-table :data="cartList" style="width: 100%" :cell-style="{ textAlign: 'center' }"
           :header-cell-style="{ 'text-align': 'center' }" @selection-change="selectionChange">
-          <el-table-column type="selection" />
-          <el-table-column prop="productName" label="商品名称" />
+          <el-table-column type="selection" :selectable="checkOnSelf" />
+          <el-table-column prop="productName" label="商品名称">
+            <template v-slot="scope">
+              {{ scope.row.productName }}
+              <span v-if="scope.row.status == 0" style="color: red;">（已下架）</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="price" label="商品价格" />
           <el-table-column label="优惠">
             <template v-slot="scope">
@@ -112,15 +118,16 @@ const total = computed(() => {
           <el-table-column label="数量">
             <template v-slot="scope">
               <el-input-number v-model="scope.row.num" @change="handleChange(scope.row.id, scope.row.num)" :min="1"
-                :max="100"></el-input-number>
+                :max="scope.row.storage"></el-input-number>
             </template>
           </el-table-column>
-
+          <el-table-column prop="storage" label="商品库存" />
           <el-table-column label="小计">
             <template v-slot="scope">
               {{ scope.row.discount * scope.row.price * scope.row.num }}
             </template>
           </el-table-column>
+
           <el-table-column label="操作">
             <template v-slot="scope">
               <el-button size="small" type="danger" @click="deleteOneCart(scope.row.id)">删除</el-button>

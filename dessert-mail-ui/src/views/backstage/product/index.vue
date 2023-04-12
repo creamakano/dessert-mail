@@ -75,7 +75,9 @@ const updateForm = reactive({
   typeId: '',
   storage: '',
   description: '',
-  status: ''
+  status: '',
+  quantity: '',
+  weight: ''
 })
 function openUpdateDialog (row) {
   updateForm.id = row.id
@@ -87,13 +89,16 @@ function openUpdateDialog (row) {
   updateForm.storage = row.storage
   updateForm.description = row.description
   updateForm.status = row.status
+  updateForm.quantity = row.quantity
+  updateForm.weight = row.weight
   console.log(row);
   updateDialog.value = true
 }
-function updateType () {
+function updateProduct () {
   put('/product/product/update', updateForm).then(res => {
     if (res.code == 200) {
       getPage()
+      ElMessage.success("编辑成功")
       updateDialog.value = false
     } else {
       ElMessage.error(res.msg)
@@ -136,6 +141,7 @@ function insertProduct () {
   post('/product/product/insert', insertForm).then(res => {
     if (res.code == 200) {
       getPage()
+      ElMessage.success('添加商品成功')
       insertDialog.value = false
     } else {
       ElMessage.error(res.msg)
@@ -162,7 +168,9 @@ function getInsertUrl (val) {
 }
 
 
-
+const whiteBG = ref({
+  'background-color': ' #fff7f1 !important'
+})
 
 </script>
 
@@ -173,23 +181,23 @@ function getInsertUrl (val) {
       <div class="title">商品类型列表 </div>
       <div class="content">
         <div class="query-line">
-            <el-form :inline="true" :model="queryForm" class="demo-form-inline">
-              <el-form-item label="商品名称">
-                <el-input v-model="queryForm.name" placeholder="" />
-              </el-form-item>
+          <el-form :inline="true" :model="queryForm" class="demo-form-inline">
+            <el-form-item label="商品名称">
+              <el-input v-model="queryForm.name" placeholder="" clearable />
+            </el-form-item>
 
-              <el-form-item label="商品类型">
-                <el-select v-model="queryForm.typeId" placeholder=" " clearable size="">
-                  <el-option v-for="item in typeDic" :key="item.id" :label="item.name" :value="item.id" />
-                </el-select>
-              </el-form-item>
+            <el-form-item label="商品类型">
+              <el-select v-model="queryForm.typeId" placeholder=" " clearable size="">
+                <el-option v-for="item in typeDic" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
+            </el-form-item>
 
-              <el-form-item>
-                <el-button :icon="Search" circle @click="getPage" /> <el-button :icon="Refresh" circle
-                  @click="queryReset" />
-              </el-form-item>
+            <el-form-item>
+              <el-button :icon="Search" circle @click="getPage" /> <el-button :icon="Refresh" circle
+                @click="queryReset" />
+            </el-form-item>
 
-            </el-form>
+          </el-form>
 
           <el-form-item>
             <el-button type="warning" size="" plain @click="insertDialog = true">添加</el-button>
@@ -212,6 +220,7 @@ function getInsertUrl (val) {
               {{ scope.row.price * scope.row.discount }}
             </template>
           </el-table-column>
+          <el-table-column prop="storage" label="商品库存" />
           <el-table-column label="操作" width="180">
             <template v-slot="scope">
               <el-button type="warning" size="small" @click="openUpdateDialog(scope.row)">编辑</el-button>
@@ -254,8 +263,15 @@ function getInsertUrl (val) {
         <el-form-item label="商品库存">
           <el-input v-model="updateForm.storage" />
         </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="updateForm.quantity" />
+        </el-form-item>
+        <el-form-item label="商品重量">
+          <el-input v-model="updateForm.weight">
+            <template #append>g</template></el-input>
+        </el-form-item>
         <el-form-item label="商品描述">
-          <el-input v-model="updateForm.description" />
+          <el-input v-model="updateForm.description" :autosize="{ minRows: 5 }" type="textarea" class="whiteBGTextarea" />
         </el-form-item>
         <el-form-item label="上架状态">
           <el-select v-model="updateForm.status">
@@ -272,7 +288,7 @@ function getInsertUrl (val) {
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="updateDialog = false">取消</el-button>
-          <el-button type="primary" @click="updateType()">
+          <el-button type="primary" @click="updateProduct()">
             确定
           </el-button>
         </span>
@@ -292,18 +308,25 @@ function getInsertUrl (val) {
           <el-input v-model="insertForm.discount" />
         </el-form-item>
         <el-form-item label="商品类型">
-          <el-select v-model="insertForm.typeId">
+          <el-select v-model="insertForm.typeId" placeholder="请选择商品类型">
             <el-option v-for="item in typeDic" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="商品库存">
           <el-input v-model="insertForm.storage" />
         </el-form-item>
+        <el-form-item label="商品数量">
+          <el-input v-model="insertForm.quantity" placeholder="1个" />
+        </el-form-item>
+        <el-form-item label="商品重量">
+          <el-input v-model="insertForm.weight">
+            <template #append>g</template></el-input>
+        </el-form-item>
         <el-form-item label="商品描述">
-          <el-input v-model="insertForm.description" />
+          <el-input v-model="insertForm.description" :autosize="{ minRows: 5 }" type="textarea" class="whiteBGTextarea" />
         </el-form-item>
         <el-form-item label="上架状态">
-          <el-select v-model="insertForm.status">
+          <el-select v-model="insertForm.status" placeholder="请选择上架状态">
             <el-option label="上架" :value="1" />
             <el-option label="下架" :value="0" />
           </el-select>

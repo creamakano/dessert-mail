@@ -33,4 +33,7 @@ body {
   background-color: #fff7f1 !important;
 }
 
+.whiteBGTextarea textarea {
+  background-color: white !important;
+}
 </style>

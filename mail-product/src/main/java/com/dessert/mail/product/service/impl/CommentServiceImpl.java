@@ -38,11 +38,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public Result getPage(CommentVo vo) {
-        if (vo.getProductId() == null){
-            return Result.parameterError();
-        }
         Page<Comment> page = new Page<>(vo.getPageNo(), vo.getPageSize());
         IPage<Comment> iPage = baseMapper.getPage(page, vo);
+        return Result.success(iPage);
+    }
+
+    @Override
+    public Result getAllPage(CommentVo vo) {
+        Page<Comment> page = new Page<>(vo.getPageNo(), vo.getPageSize());
+        IPage<Comment> iPage = baseMapper.getAllPage(page, vo);
         return Result.success(iPage);
     }
 }

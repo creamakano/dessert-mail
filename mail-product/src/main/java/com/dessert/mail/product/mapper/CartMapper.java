@@ -16,4 +16,6 @@ public interface CartMapper extends BaseMapper<Cart> {
     List<CartVo> getListByIds(List<Long> ids);
 
     IPage<CartVo> getPage(@Param("page") Page<CartVo> page, @Param("vo") CartVo vo);
+
+    List<CartVo> checkStorage(List<Long> ids);
 }

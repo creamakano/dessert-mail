@@ -70,8 +70,8 @@ function updateType () {
   })
 }
 function handleClose () {
-  updateTypeForm.id = null
-  updateTypeForm.name = null
+  updateForm.id = null
+  updateForm.name = null
   updateDialog.value = false
 
 }
@@ -163,7 +163,7 @@ function handlePageChange (val) {
 
 
 
-  <el-dialog v-model="updateDialog" title="编辑类型" width="30%" :before-close="handleClose">
+  <el-dialog v-model="updateDialog" title="用户信息修改" width="30%" :before-close="handleClose">
     <el-form :label-position="right" label-width="100px" :model="updateTypeForm" style="max-width: 460px">
       <el-form-item label="用户ID">
         <el-input v-model="updateForm.id" disabled />

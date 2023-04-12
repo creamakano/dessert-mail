@@ -9,4 +9,8 @@ public interface OrderService extends IService<Order> {
     Result getPage(OrderVo vo);
 
     Object confirmReceipt(Order order);
+
+    Result settlement(Order order, Long loginUserId);
+
+    Result submitOrder(Order order, Long userId);
 }

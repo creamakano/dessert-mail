@@ -16,6 +16,7 @@
         LEFT JOIN pms_type c on a.type_id = c.id
         <where>
             and a.is_deleted = 0
+            and a.status = 1
             <if test="vo.name!=null and vo.name!=''">
                 and a.name like concat('%',#{vo.name},'%')
             </if>

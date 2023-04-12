@@ -9,6 +9,22 @@
             and a.is_deleted = 0
             and a.product_id = #{vo.productId}
         </where>
-
+        order by a.date desc
+    </select>
+    <select id="getAllPage" resultType="com.dessert.common.entity.pms.Comment">
+        SELECT a.* , c.name as productName , b.name as userName
+        FROM pms_comment a
+        JOIN dessertmail_ums.ums_user b ON a.user_id = b.id
+        JOIN pms_product c ON c.id = a.product_id
+        <where>
+            and a.is_deleted = 0
+            <if test="vo.productName!=null and vo.productName != '' ">
+                and c.name like concat('%',#{vo.productName},'%')
+            </if>
+            <if test="vo.userName!=null and vo.userName != ''">
+                and b.name like concat('%',#{vo.userName},'%')
+            </if>
+        </where>
+        order by a.date desc
     </select>
 </mapper>

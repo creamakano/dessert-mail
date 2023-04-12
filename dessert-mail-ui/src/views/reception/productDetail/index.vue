@@ -124,8 +124,31 @@ function handleSizeChange (val) {
           </div>
         </div>
       </div>
+      <div class="info-array">
+        <div class="info-item " v-if="product.quantity">
+          <div class="info-item-title" style="width:140px;">
+            <el-image src="/src/assets/icons/product-quantity.png" style="width: 20px;height: 20px;" />
 
-      <div class="info-array" style=" height: 120px;">
+            &nbsp;
+            商品数量
+          </div>
+          <div class="info-item-content" style="width: 210px;height: 20px;">
+            {{ product.quantity }}
+          </div>
+        </div>
+        <div class="info-item" v-if="product.weight">
+          <div class="info-item-title" style="width:140px;">
+            <el-image src="/src/assets/icons/product-weight.png" style="width: 20px;height: 20px;" />
+            &nbsp;
+            商品重量
+          </div>
+          <div class="info-item-content" style="width: 210px;height: 20px;">
+            {{ product.weight }}g
+          </div>
+        </div>
+      </div>
+
+      <div class="info-array" style=" height: 90px;">
         <div class="info-item">
           <div class="info-item-title" style="width: 20%;">
             <el-image src="/src/assets/icons/product-description.svg" style="width: 20px;height: 20px;" />
@@ -136,7 +159,7 @@ function handleSizeChange (val) {
           <div class="info-item-content" style="width: 80%;">
             <el-tooltip class="box-item" effect="dark" :content="product.description" placement="top">
               <div style="width: fit-content;max-width: 100%;overflow: hidden;  font-size: 15px; 
-                              display: -webkit-box;-webkit-box-orient: vertical; -webkit-line-clamp: 3;">
+                  display: -webkit-box;-webkit-box-orient: vertical; -webkit-line-clamp: 2;">
                 {{ product.description }}
 
               </div>

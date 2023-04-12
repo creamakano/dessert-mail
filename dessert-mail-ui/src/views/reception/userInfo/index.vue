@@ -36,18 +36,19 @@ onMounted(() => {
   if (JSON.stringify(userInfoForm)) {
     userInfoForm.name = store.state.userInfo.name
   }
-}),
-  function submitUserInfoForm () {
-    put("/user/user/update", userInfoForm).then(res => {
-      if (res.code == 200) {
-        ElMessage.success(res.msg)
-      } else {
-        ElMessage.error(res.msg)
-      }
-    })
+})
 
-    console.log(userInfoForm);
-  }
+function submitUserInfoForm () {
+  put("/user/user/updateUserInfo", userInfoForm).then(res => {
+    if (res.code == 200) {
+      ElMessage.success('修改成功')
+    } else {
+      ElMessage.error(res.msg)
+    }
+  })
+
+  console.log(userInfoForm);
+}
 
 //维护密码
 const passwordForm = reactive({
@@ -229,9 +230,9 @@ function deleteAddress (id) {
       </el-form-item>
     </el-form>
 
-    <el-dialog v-model="insertAddressDialog" title="新增收获信息" width="30%" :before-close="handleClose">
+    <el-dialog v-model="insertAddressDialog" title="新增收货信息" width="30%" :before-close="handleClose">
       <el-form :label-position="right" label-width="100px" :model="addressForm" style="max-width: 460px">
-        <el-form-item label="收获人">
+        <el-form-item label="收货人">
           <el-input v-model="addressForm.name" />
         </el-form-item>
         <el-form-item label="手机号码">
@@ -300,7 +301,7 @@ function deleteAddress (id) {
     <el-pagination :current-page="page.pageNo" :page-size="page.pageSize" :page-sizes="[10, 20, 50]" :small="small"
       :disabled="disabled" :background="true" layout="total, sizes, prev, pager, next, jumper" :total="page.total"
       @size-change="handleSizeChange" @current-change="handleCurrentChange" class="bottom"></el-pagination>
-    <el-button @click="insertAddressDialog = true">新增收获信息</el-button>
+    <el-button @click="insertAddressDialog = true">新增收货信息</el-button>
     <el-button @click="showUserInfoForm">个人信息</el-button>
     <el-button @click="showPasswordForm">修改密码</el-button>
 

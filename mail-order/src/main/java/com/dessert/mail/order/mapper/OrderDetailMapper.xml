@@ -8,6 +8,6 @@
         <foreach collection="list" item="item" open="where a.id in(" close=")" separator=",">
             #{item}
         </foreach>
-        and is_deleted = 0
+        and a.is_deleted = 0
     </select>
 </mapper>

@@ -37,4 +37,13 @@ public class LoginController extends BaseController{
             return Result.success(user);
         }
     }
+
+    @PostMapping("/getCode")
+    public Result getCode(@RequestBody User user,HttpSession session){
+        return loginService.getCode(user.getMail(),session);
+    }
+    @PostMapping("/registry")
+    public Result registry(@RequestBody User user,HttpSession session){
+        return loginService.registry(user,session);
+    }
 }

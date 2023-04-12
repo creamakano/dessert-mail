@@ -25,11 +25,11 @@ public class PayController extends BaseController {
 
     @Autowired
     private PayService payService;
-    @PostMapping("/settlement")
-    public Result settlement(@RequestBody Order order, HttpSession session){
-
-        return payService.settlement(order,getLoginUserId(session));
-    }
+    // @PostMapping("/settlement")
+    // public Result settlement(@RequestBody Order order, HttpSession session){
+    //
+    //     return payService.settlement(order,getLoginUserId(session));
+    // }
 
     @PostMapping("/alipay")
     public Result toAlipay(@RequestBody Order order,HttpSession session)  {

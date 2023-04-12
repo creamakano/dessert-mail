@@ -4,20 +4,20 @@ import { ref, reactive } from "vue";
 import { get, post, del, put } from "../../../tool/http";
 import { Search, Refresh } from '@element-plus/icons-vue'
 
-const typeList = ref()
+const commentList = ref()
 //获取页面数据
 const queryForm = reactive({
   pageNo: 0,
   pageSize: 10,
   total: 0,
-  name: null
-
+  userName: '',
+  productName: ''
 })
 function getPage () {
-  get('/product/type/page', queryForm).then(res => {
+  get('/product/comment/allPage', queryForm).then(res => {
     if (res.code == 200) {
       var data = res.data
-      typeList.value = data.records
+      commentList.value = data.records
       queryForm.total = data.total
     }
   })
@@ -25,66 +25,18 @@ function getPage () {
 getPage()
 //重置表单
 function queryReset () {
-  queryForm.name = ''
-  queryForm.typeId = ''
+  queryForm.userName = ''
+  queryForm.productName = ''
   getPage()
 }
-//类型编辑
-const updateDialog = ref(false)
-const updateTypeForm = reactive({
-  id: '',
-  name: ''
-})
-function openUpdateDialog (row) {
-  updateTypeForm.id = row.id
-  updateTypeForm.name = row.name
-  updateDialog.value = true
-}
-function updateType () {
-  put('/product/type/update', updateTypeForm).then(res => {
+
+
+
+//删除评论
+function deleteComment (id) {
+  del(`/product/comment/delete/${id}`).then(res => {
     if (res.code == 200) {
-      getPage()
-      updateDialog.value = false
-    } else {
-      ElMessage.error(res.msg)
-    }
-  })
-}
-function handleClose () {
-  updateTypeForm.id = null
-  updateTypeForm.name = null
-  updateDialog.value = false
-
-}
-
-//类型新增
-const insertDialog = ref(false)
-const insertTypeForm = reactive({
-  name: ''
-})
-function openInsertDialog () {
-  insertDialog.value = true
-}
-function insertType () {
-  post('/product/type/insert', insertTypeForm).then(res => {
-    if (res.code == 200) {
-      getPage()
-      insertDialog.value = false
-    } else {
-      ElMessage.error(res.msg)
-    }
-  })
-}
-function handleInsertClose () {
-  insertTypeForm.name = null
-  insertDialog.value = false
-}
-
-
-//删除类型
-function deleteType (id) {
-  del(`/product/type/delete/${id}`).then(res => {
-    if (res.code == 200) {
+      ElMessage.success("删除成功")
       getPage()
     } else {
       ElMessage.error(res.msg)
@@ -110,13 +62,16 @@ function handlePageChange (val) {
 <template>
   <div class="content-c">
 
-    <div class="title">商品类型列表</div>
+    <div class="title">商品评价列表</div>
 
     <div class="content">
       <div class="query-line">
         <el-form :inline="true" :model="queryForm" class="demo-form-inline">
-          <el-form-item label="类型名称">
-            <el-input v-model="queryForm.name" placeholder="" />
+          <el-form-item label="商品名称">
+            <el-input v-model="queryForm.productName" placeholder="" />
+          </el-form-item>
+          <el-form-item label="评价用户">
+            <el-input v-model="queryForm.userName" placeholder="" />
           </el-form-item>
 
 
@@ -126,18 +81,17 @@ function handlePageChange (val) {
 
         </el-form>
 
-        <el-form-item>
-          <el-button type="warning" size="" plain @click="insertDialog = true">添加</el-button>
-        </el-form-item>
       </div>
-      <el-table :data="typeList" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ 'text-align': 'center' }"
+      <el-table :data="commentList" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ 'text-align': 'center' }"
         :row-style="{ 'height': '42px' }" :header-row-style="{ 'height': '42px' }" height="465">
-        <el-table-column prop="id" label="类型编号" />
-        <el-table-column prop="name" label="类型名称" />
+        <el-table-column type="index" />
+        <el-table-column prop="productName" label="商品名称" />
+        <el-table-column prop="userName" label="评价用户" />
+        <el-table-column prop="date" label="评价时间" />
+        <el-table-column prop="content" label="评价内容" show-overflow-tooltip />
         <el-table-column label="操作">
           <template v-slot="scope">
-            <el-button type="warning" size="small" @click="openUpdateDialog(scope.row)">修改</el-button>
-            <el-button type="danger" size="small" @click="deleteType(scope.row.id)">删除</el-button>
+            <el-button type="danger" size="small" @click="deleteComment(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -148,49 +102,12 @@ function handlePageChange (val) {
         @size-change="handleSizeChange" @current-change="handlePageChange" class="bottom"></el-pagination>
     </div>
   </div>
-
-
-
-  <el-dialog v-model="updateDialog" title="编辑类型" width="30%" :before-close="handleClose">
-    <el-form :label-position="right" label-width="100px" :model="updateTypeForm" style="max-width: 460px">
-      <el-form-item label="类型ID">
-        <el-input v-model="updateTypeForm.id" disabled />
-      </el-form-item>
-      <el-form-item label="类型名称">
-        <el-input v-model="updateTypeForm.name" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="updateDialog = false">取消</el-button>
-        <el-button type="primary" @click="updateType()">
-          确定
-        </el-button>
-      </span>
-    </template>
-  </el-dialog>
-
-  <el-dialog v-model="insertDialog" title="新增类型" width="30%" :before-close="handleInsertClose">
-    <el-form :label-position="right" label-width="100px" :model="insertTypeForm" style="max-width: 460px">
-      <el-form-item label="类型名称">
-        <el-input v-model="insertTypeForm.name" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="insertDialog = false">取消</el-button>
-        <el-button type="primary" @click="insertType()">
-          确定
-        </el-button>
-      </span>
-    </template>
-  </el-dialog>
 </template>
 
 <style scoped>
 .content-c {
   border: 1px solid rgb(221, 126, 107);
-  width: 1100px;
+  width: 1300px;
   margin: 40px auto;
 }
 
@@ -219,7 +136,7 @@ function handlePageChange (val) {
 
 .query-line {
   border-bottom: 2px dotted rgb(221, 126, 107);
-  padding: 0 150px;
+  padding: 0 144px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;

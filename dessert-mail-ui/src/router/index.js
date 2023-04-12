@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/login/LoginView.vue'
-import TestView from '../views/reception/test/index.vue'
+import RegistryView from '../views/registry/index.vue'
 import BackView from '../views/backstage/index.vue'
 import store from '../store'
 import { awaitGet } from '../tool/http.js'
 import { ElMessage } from 'element-plus'
+import { ElLoading } from 'element-plus'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -56,6 +57,10 @@ const router = createRouter({
           path: 'comment',
           component: () => import('../views/reception/comment/index.vue')
         },
+        {
+          path: 'submitOrder',
+          component: () => import('../views/reception/submitOrder/index.vue')
+        },
 
       ]
     },
@@ -65,8 +70,8 @@ const router = createRouter({
       component: LoginView
     },
     {
-      path: '/test',
-      component: TestView
+      path: '/registry',
+      component: RegistryView
     },
     {
       path: '/back',
@@ -116,18 +121,34 @@ const router = createRouter({
 //       }
 //   }
 // });
+// const loading = ElLoading.service({
+//   lock: true,
+//   text: 'Loading',
+//   background: 'rgba(0, 0, 0, 0.7)',
+// })
 
+// const openFullScreen2 = () => {
 
-
+//   setTimeout(() => {
+//     loading.close()
+//   }, 2000)
+// }
+var loading
 router.beforeEach(async (to, from, next) => {
-  if (to.path != '/' && to.path != '/home' && to.path != '/home/productDetail') {
+  loading = ElLoading.service({
+    lock: true,
+    text: 'Loading',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+
+  if (to.path != '/' && to.path != '/home'&& to.path != '/registry' && to.path != '/home/productDetail') {
     if (store.state.userInfo.auth == '') {
       await awaitGet('/user/login/session').then(res => {
         if (res.code == 200) {
           store.commit("setUserInfo", res.data)
         } else {
           ElMessage.error(res.msg)
-          router.push('/home')
+          router.push('/')
         }
       })
     }
@@ -140,6 +161,10 @@ router.beforeEach(async (to, from, next) => {
   next()//需要调用next()才能放行
 })
 
+router.afterEach((to, from, next) => {
+  loading.close()
+
+})
 
 
 

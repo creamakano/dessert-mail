@@ -74,4 +74,18 @@ public class CartController extends BaseController{
     public Result<List<CartVo>> getListByIds(@RequestParam ("ids")List<Long> ids){
         return baseService.getListByIds(ids);
     }
+    @GetMapping("/cartSubmitByIds")
+    public Result<List<CartVo>> cartSubmitByIds(@RequestParam ("ids")List<Long> ids){
+        return baseService.cartSubmitByIds(ids);
+    }
+
+    @GetMapping("/settlement")
+    public Result settlement(CartVo vo){
+        return baseService.settlement(vo.getIds());
+    }
+
+    @GetMapping("/checkStorage")
+    public Result checkStorage(CartVo vo){
+        return baseService.checkStorage(vo);
+    }
 }

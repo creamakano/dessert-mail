@@ -41,11 +41,22 @@ public class OrderController extends BaseController{
 
     @PutMapping("/send")
     private Result send(@RequestBody Order order){
-        order.setStatus(2);
+        order.setStatus(3);
         return Result.success(orderService.updateById(order));
     }
     @PutMapping("/confirmReceipt")
     private Result confirmReceipt(@RequestBody Order order){
         return Result.success(orderService.confirmReceipt(order));
     }
+
+    @PostMapping("/submitOrder")
+    private Result submit(@RequestBody Order order, HttpSession session){
+
+        return orderService.submitOrder(order,getLoginUserId(session));
+    }
+
+    // @PostMapping("/settlement")
+    // private Result settlement(@RequestBody Order order, HttpSession session){
+    //     return orderService.settlement(order,getLoginUserId(session));
+    // }
 }

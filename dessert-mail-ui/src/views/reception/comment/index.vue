@@ -32,6 +32,8 @@ function comment (id, productId, content) {
     }
   })
 }
+
+const value = ref()
 </script>
 
 
@@ -64,6 +66,9 @@ function comment (id, productId, content) {
                 </div>
                 <div class="info-item">{{ item.num }}</div>
               </div>
+              <!-- <div class="info-array">
+                  <el-rate v-model="value" allow-half size="large" void-color="#806a6a" />
+                </div> -->
 
             </div>
           </div>

@@ -21,19 +21,23 @@ public class Product {
 
     private String name;
 
-    private double price;
+    private Double price;
 
     private String picture;
 
     private Long typeId;
 
-    private double discount;
+    private Double discount;
 
-    private Long storage;
+    private Integer storage;
 
     private Integer Status;
 
     private String description;
+
+    private String quantity;
+
+    private Integer weight;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

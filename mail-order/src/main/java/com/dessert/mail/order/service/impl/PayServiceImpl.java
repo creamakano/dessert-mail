@@ -18,6 +18,7 @@ import com.dessert.mail.order.service.OrderDetailService;
 import com.dessert.mail.order.service.OrderService;
 import com.dessert.mail.order.service.PayService;
 import com.dessert.mail.order.utils.OrderUtil;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,27 +55,13 @@ public class PayServiceImpl extends ServiceImpl<OrderMapper, Order> implements P
 
     @Override
     public Result toAlipay(Order order) {
-        if(ObjectUtils.isNull(order.getOrderNum(),order.getDescription(),order.getTotal())){
+        if(ObjectUtils.isEmpty(order.getId())){
             return Result.parameterError();
         }
-        List<CartVo> cartList = productFeignClient.getListByIds(order.getCartIds()).getData();
-        order.setDate(new Date());
-        order.setIsComment(0);
-        order.setStatus(0);
-        orderService.save(order);
-        List<OrderDetail> detailList = new ArrayList<>();
-        //保存订单详情
-        for (CartVo cart : cartList) {
-            OrderDetail detail = new OrderDetail();
-            detail.setNum(cart.getNum());
-            detail.setOrderId(order.getId());
-            detail.setProductId(cart.getProductId());
-            detail.setProductName(cart.getProductName());
-            detail.setProductPrice(cart.getPrice()*cart.getDiscount());
-            detail.setProductPicture(cart.getPicture());
-            detailList.add(detail);
-        }
-        detailService.saveBatch(detailList);
+        order = orderService.getById(order.getId());
+        order.setStatus(2);
+        orderService.updateById(order);
+        //配置支付客户端
         AlipayClient alipayClient = new DefaultAlipayClient(
                 AlipayConfig.gatewayUrl,
                 AlipayConfig.app_id,
@@ -104,7 +91,7 @@ public class PayServiceImpl extends ServiceImpl<OrderMapper, Order> implements P
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        paySuccess(order);
+        // paySuccess(order);
         return Result.success(form);
     }
 

@@ -5,7 +5,6 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import store from '../src/store/index.js'
 import { axios } from '../src/tool/http.js'
-import { useRouter } from 'vue-router'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const app = createApp(App)
 app.use(router)

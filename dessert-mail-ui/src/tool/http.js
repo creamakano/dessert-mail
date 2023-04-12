@@ -3,14 +3,6 @@ import { useRouter } from 'vue-router'
 const route = useRouter()
 axios.defaults.baseURL = "http://localhost:7777"
 axios.defaults.withCredentials = true
-// axios.interceptors.response.use((response) => {
-//   console.log(response.headers.get("success"));
-//   if (response.headers.get("success") == 'false') {
-//     window.sessionStorage.setItem("user",null)
-//   }
-//   return response;
-// })
-
 async function get (url, data) {
   return new Promise((resolve, reject) => {
     axios({

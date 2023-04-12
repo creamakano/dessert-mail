@@ -34,4 +34,7 @@ public class User implements Serializable {
 
     @TableField(exist = false)
     private String newPassword;
+
+    @TableField(exist = false)
+    private String code;
 }

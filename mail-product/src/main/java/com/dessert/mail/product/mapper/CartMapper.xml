@@ -11,7 +11,7 @@
         </where>
     </select>
     <select id="getListByIds" resultType="com.dessert.common.entity.pms.CartVo">
-        select a.* , b.name as productName , b.price , b.discount ,b.picture
+        select a.* , b.name as productName , b.price , b.discount ,b.picture,b.storage
         from pms_cart a
         join pms_product b on a.product_id = b.id
         <where>
@@ -24,12 +24,25 @@
 
     </select>
     <select id="getPage" resultType="com.dessert.common.entity.pms.CartVo">
-        select a.* , b.name as productName , b.price , b.discount
+        select a.* , b.name as productName , b.price , b.discount,b.status,b.storage
         from pms_cart a
         join pms_product b on a.product_id = b.id
         <where>
             and a.is_deleted = 0
             and a.user_id = #{vo.userId}
+        </where>
+    </select>
+    <select id="checkStorage" resultType="com.dessert.common.entity.pms.CartVo">
+        select a.* , b.name as productName , b.price , b.discount ,b.picture,b.`storage`
+        from pms_cart a
+        join pms_product b on a.product_id = b.id
+        <where>
+            and a.num > b.`storage`
+            and a.is_deleted = 0
+            and a.id in
+            <foreach collection="list" item="tagNumber" index="index" open="(" close=")" separator=",">
+                #{tagNumber}
+            </foreach>
         </where>
     </select>
 

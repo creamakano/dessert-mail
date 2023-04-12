@@ -44,6 +44,7 @@ function updateType () {
   put('/product/type/update', updateTypeForm).then(res => {
     if (res.code == 200) {
       getPage()
+      ElMessage.success("编辑成功")
       updateDialog.value = false
     } else {
       ElMessage.error(res.msg)
@@ -69,6 +70,7 @@ function insertType () {
   post('/product/type/insert', insertTypeForm).then(res => {
     if (res.code == 200) {
       getPage()
+      ElMessage.success("添加成功")
       insertDialog.value = false
     } else {
       ElMessage.error(res.msg)
@@ -86,6 +88,7 @@ function deleteType (id) {
   del(`/product/type/delete/${id}`).then(res => {
     if (res.code == 200) {
       getPage()
+      ElMessage.success("删除成功")
     } else {
       ElMessage.error(res.msg)
     }
