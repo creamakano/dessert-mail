@@ -35,7 +35,8 @@ function addCollection () {
 function addCart () {
   post('/product/cart/insert', {
     productId: product.value.id,
-    num: 1
+    num: 1,
+    typeId: product.value.typeId
   }).then(res => {
     if (res.code == 200) {
       ElMessage.success("加入购物车成功")
@@ -159,7 +160,7 @@ function handleSizeChange (val) {
           <div class="info-item-content" style="width: 80%;">
             <el-tooltip class="box-item" effect="dark" :content="product.description" placement="top">
               <div style="width: fit-content;max-width: 100%;overflow: hidden;  font-size: 15px; 
-                  display: -webkit-box;-webkit-box-orient: vertical; -webkit-line-clamp: 2;">
+                    display: -webkit-box;-webkit-box-orient: vertical; -webkit-line-clamp: 2;">
                 {{ product.description }}
 
               </div>

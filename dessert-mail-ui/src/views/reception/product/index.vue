@@ -86,10 +86,11 @@ function star (id, val) {
 
 
 //添加到购物车
-function addToCart (id) {
+function addToCart (id,typeId) {
   post('/product/cart/insert', {
     productId: id,
-    num: 1
+    num: 1,
+    typeId:typeId
   }).then(res => {
     if (res.code == 200) {
       ElMessage.success("添加成功")
@@ -152,7 +153,7 @@ function goToProductDetail (id) {
           <el-icon v-if="val.isCollection == 1" class="star" size="28px" @click="starCancel(val.id, val)" color="red">
             <StarFilled />
           </el-icon>
-          <el-button type="primary" @click="addToCart(val.id)">加入购物车</el-button>
+          <el-button type="primary" @click="addToCart(val.id,val.typeId)">加入购物车</el-button>
         </div>
         <div class="bottom-c">
           <el-pagination :current-page="queryForm.pageNo" :page-size="queryForm.pageSize" :page-sizes="[10, 20, 50]"

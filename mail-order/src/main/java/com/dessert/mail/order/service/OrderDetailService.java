@@ -2,6 +2,7 @@ package com.dessert.mail.order.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dessert.common.entity.common.Result;
+import com.dessert.common.entity.common.StatisticsVo;
 import com.dessert.common.entity.oms.OrderDetail;
 import com.dessert.common.entity.oms.OrderDetailVo;
 
@@ -20,4 +21,5 @@ public interface OrderDetailService extends IService<OrderDetail> {
 
     Integer updateCommentStatus(Long id);
 
+    List<StatisticsVo> typeStatistics();
 }

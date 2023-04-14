@@ -5,6 +5,8 @@ import com.dessert.common.entity.common.Result;
 import com.dessert.common.entity.pms.ProductType;
 import com.dessert.common.entity.pms.ProductTypeVo;
 
+import java.util.Map;
+
 
 public interface ProductTypeService extends IService<ProductType> {
     Result getPage(ProductTypeVo vo);
@@ -14,4 +16,6 @@ public interface ProductTypeService extends IService<ProductType> {
     Result deleteById(Long id);
 
     Result insert(ProductType type);
+
+    Result<Map<Long, String>> getProductTypeDict();
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dessert.common.entity.common.Result;
+import com.dessert.common.entity.common.StatisticsVo;
 import com.dessert.common.entity.oms.Order;
 import com.dessert.common.entity.oms.OrderDetail;
 import com.dessert.common.entity.oms.OrderVo;
@@ -86,10 +87,41 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             detail.setProductName(cart.getProductName());
             detail.setProductPrice(cart.getPrice()*cart.getDiscount());
             detail.setProductPicture(cart.getPicture());
+            detail.setProductTypeId(cart.getTypeId());
             detailList.add(detail);
         }
         detailService.saveBatch(detailList);
         return Result.success(order);
+    }
+
+    @Override
+    public List<StatisticsVo> orderStatusStatistics() {
+        return baseMapper.orderStatusStatistics();
+    }
+
+    @Override
+    public List<StatisticsVo> orderStatistics() {
+        return baseMapper.orderStatistics();
+    }
+
+    @Override
+    public Integer countTodayOrderNums() {
+        return baseMapper.countTodayOrderNums();
+    }
+
+    @Override
+    public Double countTodayTotalMoney() {
+        return baseMapper.countTodayTotalMoney();
+    }
+
+    @Override
+    public Double countYesterdayOrderNums() {
+        return baseMapper.countYesterdayOrderNums();
+    }
+
+    @Override
+    public Double countWeekOrderNums() {
+        return baseMapper.countWeekOrderNums();
     }
 
     private void buildCondition(OrderVo vo, LambdaQueryWrapper<Order> wrapper) {

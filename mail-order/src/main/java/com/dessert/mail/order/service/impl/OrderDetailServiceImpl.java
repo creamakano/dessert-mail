@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dessert.common.entity.common.Result;
+import com.dessert.common.entity.common.StatisticsVo;
 import com.dessert.common.entity.oms.Order;
 import com.dessert.common.entity.oms.OrderDetail;
 import com.dessert.common.entity.oms.OrderDetailVo;
@@ -69,6 +70,11 @@ public class OrderDetailServiceImpl extends ServiceImpl<OrderDetailMapper, Order
             return 1;
         }
         return 0;
+    }
+
+    @Override
+    public List<StatisticsVo> typeStatistics() {
+        return baseMapper.typeStatistics();
     }
 
     @Override

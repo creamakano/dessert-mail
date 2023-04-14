@@ -9,6 +9,9 @@ import com.dessert.mail.product.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/type")
 public class ProductTypeController {
@@ -17,7 +20,7 @@ public class ProductTypeController {
     private ProductTypeService baseService;
 
     @GetMapping("/list")
-    public Result list(){
+    public Result<List<ProductType>> list(){
         return Result.success(baseService.list());
     }
     @GetMapping("/page")
@@ -35,5 +38,9 @@ public class ProductTypeController {
     @DeleteMapping("/delete/{id}")
     public Result deleteById(@PathVariable("id") Long id){
         return baseService.deleteById(id);
+    }
+    @GetMapping("/map")
+    public Result<Map<Long,String>> getProductTypeDict(){
+        return baseService.getProductTypeDict();
     }
 }

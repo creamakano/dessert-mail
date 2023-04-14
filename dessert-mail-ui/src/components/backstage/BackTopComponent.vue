@@ -9,6 +9,7 @@
     <el-menu-item index="/back/order">订单管理</el-menu-item>
     <el-menu-item index="/back/user" v-if="$store.state.userInfo.auth > 1">用户管理</el-menu-item>
     <el-menu-item index="/back/comment">评论管理</el-menu-item>
+    <el-menu-item index="/back/statistics">数据统计</el-menu-item>
     <el-menu-item index="#" @click="logout">安全退出</el-menu-item>
 
   </el-menu>

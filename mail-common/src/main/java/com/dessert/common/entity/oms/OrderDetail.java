@@ -29,6 +29,11 @@ public class OrderDetail implements Serializable {
     private Long productId;
 
     /**
+     * 商品id
+     */
+    private Long productTypeId;
+
+    /**
      * 商品名称
      */
     private String productName;

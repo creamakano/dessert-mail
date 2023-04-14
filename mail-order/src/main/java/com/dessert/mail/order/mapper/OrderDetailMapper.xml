@@ -10,4 +10,13 @@
         </foreach>
         and a.is_deleted = 0
     </select>
+    <select id="typeStatistics" resultType="com.dessert.common.entity.common.StatisticsVo">
+        SELECT product_type_id AS 'name' , ROUND( 360 * COUNT( 1 )/( SELECT count(*) FROM oms_order_detail )) AS 'value'
+        FROM
+            oms_order_detail
+                inner JOIN oms_order a on order_id =  a.id
+        where a.is_deleted = 0
+        GROUP BY
+            product_type_id
+    </select>
 </mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dessert.mail.order.mapper.OrderMapper">
+    <select id="orderStatusStatistics" resultType="com.dessert.common.entity.common.StatisticsVo">
+        select `status` as 'name' , ROUND( 360 * COUNT( 1 )/( SELECT count(*) FROM oms_order )) AS 'value'
+        FROM oms_order
+        WHERE is_deleted = 0
+        GROUP BY `status`
+    </select>
+    <select id="orderStatistics" resultType="com.dessert.common.entity.common.StatisticsVo">
+        SELECT
+            lefttable.DATE as 'name' ,
+            IFNULL( righttable.m, '0' ) AS 'value'
+        FROM
+            (
+                SELECT
+                    date_sub( CURDATE(), INTERVAL @i := @i + 1 DAY ) AS DATE
+                FROM
+                    (
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1 UNION ALL
+                    SELECT
+                    1
+                    ) AS tmp,(
+                    SELECT
+                    @i := - 1
+                    ) t
+            ) AS lefttable
+                LEFT JOIN (
+                SELECT
+                    sum( 1 ) AS m,
+                    DATE_FORMAT( `date` , '%Y-%m-%d' ) AS gptime
+                FROM
+                    oms_order
+                WHERE
+                    DATE (  `date`  )>= DATE_SUB( CURDATE(), INTERVAL 29 DAY )
+        GROUP BY
+            gptime
+            ) AS righttable ON lefttable.DATE = righttable.gptime
+        ORDER BY date
+    </select>
+    <select id="countTodayOrderNums" resultType="java.lang.Integer">
+        SELECT
+            count( 1 )
+        FROM
+            oms_order
+        WHERE
+            is_deleted = 0
+            AND DATE_FORMAT( NOW(), '%Y-%m-%d' ) = DATE_FORMAT(
+                `date`,
+                '%Y-%m-%d'
+            )
+    </select>
+
+    <select id="countTodayTotalMoney" resultType="java.lang.Double">
+        SELECT
+            sum( total )
+        FROM
+            oms_order
+        WHERE
+            is_deleted = 0
+            AND DATE_FORMAT( NOW(), '%Y-%m-%d' ) = DATE_FORMAT(
+                `date`,
+                '%Y-%m-%d'
+            )
+    </select>
+    <select id="countYesterdayOrderNums" resultType="java.lang.Double">
+        SELECT
+            sum( total )
+        FROM
+            oms_order
+        WHERE
+            is_deleted = 0
+          AND DATE_FORMAT( DATE_SUB( NOW(), INTERVAL 1 DAY ), '%Y-%m-%d' ) = DATE_FORMAT(
+                `date`,
+                '%Y-%m-%d'
+            )
+    </select>
+    <select id="countWeekOrderNums" resultType="java.lang.Double">
+        SELECT
+        sum( total )
+        FROM
+        oms_order
+        WHERE
+        is_deleted = 0
+        AND DATE_FORMAT( DATE_SUB( NOW(), INTERVAL 7 DAY ), '%Y-%m-%d' ) &lt; DATE_FORMAT(
+        `date`,
+        '%Y-%m-%d'
+        )
+
+    </select>
+</mapper>

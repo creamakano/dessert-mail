@@ -15,6 +15,10 @@ import com.dessert.mail.product.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, ProductType> implements ProductTypeService {
 
@@ -65,5 +69,13 @@ public class ProductTypeServiceImpl extends ServiceImpl<ProductTypeMapper, Produ
             this.save(type);
         }
         return Result.success();
+    }
+
+    @Override
+    public Result<Map<Long, String>> getProductTypeDict() {
+        List<ProductType> list = this.list();
+        Map<Long, String> typeDict = new HashMap<>();
+        list.stream().forEach((e)->typeDict.put(e.getId(),e.getName()));
+        return Result.success(typeDict);
     }
 }

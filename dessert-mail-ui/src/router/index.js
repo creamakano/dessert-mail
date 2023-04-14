@@ -102,6 +102,10 @@ const router = createRouter({
           path: 'comment',
           component: () => import('../views/backstage/comment/index.vue')
         },
+        {
+          path: 'statistics',
+          component: () => import('../views/backstage/statistics/index.vue')
+        },
       ]
     }
   ]
@@ -141,7 +145,7 @@ router.beforeEach(async (to, from, next) => {
     background: 'rgba(0, 0, 0, 0.7)',
   })
 
-  if (to.path != '/' && to.path != '/home'&& to.path != '/registry' && to.path != '/home/productDetail') {
+  if (to.path != '/' && to.path != '/home' && to.path != '/registry' && to.path != '/home/productDetail') {
     if (store.state.userInfo.auth == '') {
       await awaitGet('/user/login/session').then(res => {
         if (res.code == 200) {

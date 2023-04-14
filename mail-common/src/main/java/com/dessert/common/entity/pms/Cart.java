@@ -26,6 +26,8 @@ public class Cart {
 
     private Long productId;
 
+    private Long typeId;
+
     private Integer num;
 
     /** 创建时间 */
